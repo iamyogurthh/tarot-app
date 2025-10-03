@@ -11,7 +11,7 @@ const MainMenuBtn = () => {
     <div>
       <Link
         href="/"
-        className="bg-[#9799f543] absolute top-[24px] left-[24px] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg text-dark_p"
+        className="bg-[#9799f543] absolute top-[16px] left-[16px] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg text-dark_p"
         onClick={() => {
           clearForm(), setUserSelectedTarotData([])
         }}

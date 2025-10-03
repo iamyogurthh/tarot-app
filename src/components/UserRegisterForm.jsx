@@ -32,10 +32,9 @@ const majors = [
   'Law',
 ]
 
-const UserInputForm = () => {
+const UserRegisterForm = () => {
   const router = useRouter()
   const { formData, updateField } = useForm()
-  console.log(formData)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -43,12 +42,7 @@ const UserInputForm = () => {
   }
 
   const handleNext = () => {
-    if (
-      !formData.full_name ||
-      !formData.user_name ||
-      !formData.dob ||
-      !formData.major
-    ) {
+    if (!formData.name || !formData.dob || !formData.major) {
       alert('Please fill out all fields.')
       return
     }
@@ -137,19 +131,19 @@ const UserInputForm = () => {
           onClick={handleNext}
           className="cursor-pointer px-[32px] py-[10px] rounded-[24px] font-bold text-dark_p border-2 border-[#9798F5] bg-gradient-to-r from-[#cbccfa] to-[#9798f5] shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:brightness-110"
         >
-          Let's Start
+          Register
         </button>
       </div>
       <div className="flex items-center justify-center animate-fade-in-up fade-delay-5">
         <Link
-          href={'/registerUser'}
+          href={'/'}
           className="items-center underline font-bold mt-[16px] text-[#654597] hover:text-white"
         >
-          Don’t have an account? Register
+          Already have an account? Login
         </Link>
       </div>
     </div>
   )
 }
 
-export default UserInputForm
+export default UserRegisterForm

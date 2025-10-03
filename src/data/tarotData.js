@@ -1,6 +1,7 @@
 export const tarotData = [
   {
     id: 0,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Fool',
     zodiac: 'Uranus',
     numerology: 0,
@@ -21,13 +22,13 @@ export const tarotData = [
       q6: 'the fool - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the fool - health - q1 - ans',
-      q2: 'the fool - health - q2 - ans',
-      q3: 'the fool - health - q3 - ans',
-      q4: 'the fool - health - q4 - ans',
-      q5: 'the fool - health - q5 - ans',
-      q6: 'the fool - health - q6 - ans',
+      // Changed from education
+      q1: 'the fool - education - q1 - ans',
+      q2: 'the fool - education - q2 - ans',
+      q3: 'the fool - education - q3 - ans',
+      q4: 'the fool - education - q4 - ans',
+      q5: 'the fool - education - q5 - ans',
+      q6: 'the fool - education - q6 - ans',
     },
     business: {
       q1: 'the fool - business - q1 - ans',
@@ -40,6 +41,7 @@ export const tarotData = [
   },
   {
     id: 1,
+    img: '/tarot_images/magician.jpg',
     card_name: 'The Magician',
     zodiac: 'Mercury',
     numerology: 1,
@@ -60,13 +62,13 @@ export const tarotData = [
       q6: 'the magician - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the magician - health - q1 - ans',
-      q2: 'the magician - health - q2 - ans',
-      q3: 'the magician - health - q3 - ans',
-      q4: 'the magician - health - q4 - ans',
-      q5: 'the magician - health - q5 - ans',
-      q6: 'the magician - health - q6 - ans',
+      // Changed from education
+      q1: 'the magician - education - q1 - ans',
+      q2: 'the magician - education - q2 - ans',
+      q3: 'the magician - education - q3 - ans',
+      q4: 'the magician - education - q4 - ans',
+      q5: 'the magician - education - q5 - ans',
+      q6: 'the magician - education - q6 - ans',
     },
     business: {
       q1: 'the magician - business - q1 - ans',
@@ -79,6 +81,7 @@ export const tarotData = [
   },
   {
     id: 2,
+    img: '/tarot_images/high_priestess.jpg',
     card_name: 'The High Priestess',
     zodiac: 'Moon',
     numerology: 2,
@@ -99,13 +102,13 @@ export const tarotData = [
       q6: 'the high priestess - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the high priestess - health - q1 - ans',
-      q2: 'the high priestess - health - q2 - ans',
-      q3: 'the high priestess - health - q3 - ans',
-      q4: 'the high priestess - health - q4 - ans',
-      q5: 'the high priestess - health - q5 - ans',
-      q6: 'the high priestess - health - q6 - ans',
+      // Changed from education
+      q1: 'the high priestess - education - q1 - ans',
+      q2: 'the high priestess - education - q2 - ans',
+      q3: 'the high priestess - education - q3 - ans',
+      q4: 'the high priestess - education - q4 - ans',
+      q5: 'the high priestess - education - q5 - ans',
+      q6: 'the high priestess - education - q6 - ans',
     },
     business: {
       q1: 'the high priestess - business - q1 - ans',
@@ -118,6 +121,7 @@ export const tarotData = [
   },
   {
     id: 3,
+    img: '/tarot_images/empress.jpg',
     card_name: 'The Empress',
     zodiac: 'Venus',
     numerology: 3,
@@ -138,13 +142,13 @@ export const tarotData = [
       q6: 'the empress - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the empress - health - q1 - ans',
-      q2: 'the empress - health - q2 - ans',
-      q3: 'the empress - health - q3 - ans',
-      q4: 'the empress - health - q4 - ans',
-      q5: 'the empress - health - q5 - ans',
-      q6: 'the empress - health - q6 - ans',
+      // Changed from education
+      q1: 'the empress - education - q1 - ans',
+      q2: 'the empress - education - q2 - ans',
+      q3: 'the empress - education - q3 - ans',
+      q4: 'the empress - education - q4 - ans',
+      q5: 'the empress - education - q5 - ans',
+      q6: 'the empress - education - q6 - ans',
     },
     business: {
       q1: 'the empress - business - q1 - ans',
@@ -157,6 +161,7 @@ export const tarotData = [
   },
   {
     id: 4,
+    img: '/tarot_images/emperor.jpg',
     card_name: 'The Emperor',
     zodiac: 'Aries',
     numerology: 4,
@@ -177,13 +182,13 @@ export const tarotData = [
       q6: 'the emperor - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the emperor - health - q1 - ans',
-      q2: 'the emperor - health - q2 - ans',
-      q3: 'the emperor - health - q3 - ans',
-      q4: 'the emperor - health - q4 - ans',
-      q5: 'the emperor - health - q5 - ans',
-      q6: 'the emperor - health - q6 - ans',
+      // Changed from education
+      q1: 'the emperor - education - q1 - ans',
+      q2: 'the emperor - education - q2 - ans',
+      q3: 'the emperor - education - q3 - ans',
+      q4: 'the emperor - education - q4 - ans',
+      q5: 'the emperor - education - q5 - ans',
+      q6: 'the emperor - education - q6 - ans',
     },
     business: {
       q1: 'the emperor - business - q1 - ans',
@@ -196,6 +201,7 @@ export const tarotData = [
   },
   {
     id: 5,
+    img: '/tarot_images/heirophant.jpg',
     card_name: 'The Hierophant',
     zodiac: 'Taurus',
     numerology: 5,
@@ -216,13 +222,13 @@ export const tarotData = [
       q6: 'the hierophant - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the hierophant - health - q1 - ans',
-      q2: 'the hierophant - health - q2 - ans',
-      q3: 'the hierophant - health - q3 - ans',
-      q4: 'the hierophant - health - q4 - ans',
-      q5: 'the hierophant - health - q5 - ans',
-      q6: 'the hierophant - health - q6 - ans',
+      // Changed from education
+      q1: 'the hierophant - education - q1 - ans',
+      q2: 'the hierophant - education - q2 - ans',
+      q3: 'the hierophant - education - q3 - ans',
+      q4: 'the hierophant - education - q4 - ans',
+      q5: 'the hierophant - education - q5 - ans',
+      q6: 'the hierophant - education - q6 - ans',
     },
     business: {
       q1: 'the hierophant - business - q1 - ans',
@@ -235,6 +241,7 @@ export const tarotData = [
   },
   {
     id: 6,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Lovers',
     zodiac: 'Gemini',
     numerology: 6,
@@ -255,13 +262,13 @@ export const tarotData = [
       q6: 'the lovers - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the lovers - health - q1 - ans',
-      q2: 'the lovers - health - q2 - ans',
-      q3: 'the lovers - health - q3 - ans',
-      q4: 'the lovers - health - q4 - ans',
-      q5: 'the lovers - health - q5 - ans',
-      q6: 'the lovers - health - q6 - ans',
+      // Changed from education
+      q1: 'the lovers - education - q1 - ans',
+      q2: 'the lovers - education - q2 - ans',
+      q3: 'the lovers - education - q3 - ans',
+      q4: 'the lovers - education - q4 - ans',
+      q5: 'the lovers - education - q5 - ans',
+      q6: 'the lovers - education - q6 - ans',
     },
     business: {
       q1: 'the lovers - business - q1 - ans',
@@ -274,6 +281,7 @@ export const tarotData = [
   },
   {
     id: 7,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Chariot',
     zodiac: 'Cancer',
     numerology: 7,
@@ -294,13 +302,13 @@ export const tarotData = [
       q6: 'the chariot - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the chariot - health - q1 - ans',
-      q2: 'the chariot - health - q2 - ans',
-      q3: 'the chariot - health - q3 - ans',
-      q4: 'the chariot - health - q4 - ans',
-      q5: 'the chariot - health - q5 - ans',
-      q6: 'the chariot - health - q6 - ans',
+      // Changed from education
+      q1: 'the chariot - education - q1 - ans',
+      q2: 'the chariot - education - q2 - ans',
+      q3: 'the chariot - education - q3 - ans',
+      q4: 'the chariot - education - q4 - ans',
+      q5: 'the chariot - education - q5 - ans',
+      q6: 'the chariot - education - q6 - ans',
     },
     business: {
       q1: 'the chariot - business - q1 - ans',
@@ -313,6 +321,7 @@ export const tarotData = [
   },
   {
     id: 8,
+    img: '/tarot_images/fool.jpg',
     card_name: 'Strength',
     zodiac: 'Leo',
     numerology: 8,
@@ -333,13 +342,13 @@ export const tarotData = [
       q6: 'strength - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'strength - health - q1 - ans',
-      q2: 'strength - health - q2 - ans',
-      q3: 'strength - health - q3 - ans',
-      q4: 'strength - health - q4 - ans',
-      q5: 'strength - health - q5 - ans',
-      q6: 'strength - health - q6 - ans',
+      // Changed from education
+      q1: 'strength - education - q1 - ans',
+      q2: 'strength - education - q2 - ans',
+      q3: 'strength - education - q3 - ans',
+      q4: 'strength - education - q4 - ans',
+      q5: 'strength - education - q5 - ans',
+      q6: 'strength - education - q6 - ans',
     },
     business: {
       q1: 'strength - business - q1 - ans',
@@ -352,6 +361,7 @@ export const tarotData = [
   },
   {
     id: 9,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Hermit',
     zodiac: 'Virgo',
     numerology: 9,
@@ -372,13 +382,13 @@ export const tarotData = [
       q6: 'the hermit - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the hermit - health - q1 - ans',
-      q2: 'the hermit - health - q2 - ans',
-      q3: 'the hermit - health - q3 - ans',
-      q4: 'the hermit - health - q4 - ans',
-      q5: 'the hermit - health - q5 - ans',
-      q6: 'the hermit - health - q6 - ans',
+      // Changed from education
+      q1: 'the hermit - education - q1 - ans',
+      q2: 'the hermit - education - q2 - ans',
+      q3: 'the hermit - education - q3 - ans',
+      q4: 'the hermit - education - q4 - ans',
+      q5: 'the hermit - education - q5 - ans',
+      q6: 'the hermit - education - q6 - ans',
     },
     business: {
       q1: 'the hermit - business - q1 - ans',
@@ -391,6 +401,7 @@ export const tarotData = [
   },
   {
     id: 10,
+    img: '/tarot_images/fool.jpg',
     card_name: 'Wheel of Fortune',
     zodiac: 'Jupiter',
     numerology: 10,
@@ -411,13 +422,13 @@ export const tarotData = [
       q6: 'wheel of fortune - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'wheel of fortune - health - q1 - ans',
-      q2: 'wheel of fortune - health - q2 - ans',
-      q3: 'wheel of fortune - health - q3 - ans',
-      q4: 'wheel of fortune - health - q4 - ans',
-      q5: 'wheel of fortune - health - q5 - ans',
-      q6: 'wheel of fortune - health - q6 - ans',
+      // Changed from education
+      q1: 'wheel of fortune - education - q1 - ans',
+      q2: 'wheel of fortune - education - q2 - ans',
+      q3: 'wheel of fortune - education - q3 - ans',
+      q4: 'wheel of fortune - education - q4 - ans',
+      q5: 'wheel of fortune - education - q5 - ans',
+      q6: 'wheel of fortune - education - q6 - ans',
     },
     business: {
       q1: 'wheel of fortune - business - q1 - ans',
@@ -430,6 +441,7 @@ export const tarotData = [
   },
   {
     id: 11,
+    img: '/tarot_images/fool.jpg',
     card_name: 'Justice',
     zodiac: 'Libra',
     numerology: 11,
@@ -450,13 +462,13 @@ export const tarotData = [
       q6: 'justice - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'justice - health - q1 - ans',
-      q2: 'justice - health - q2 - ans',
-      q3: 'justice - health - q3 - ans',
-      q4: 'justice - health - q4 - ans',
-      q5: 'justice - health - q5 - ans',
-      q6: 'justice - health - q6 - ans',
+      // Changed from education
+      q1: 'justice - education - q1 - ans',
+      q2: 'justice - education - q2 - ans',
+      q3: 'justice - education - q3 - ans',
+      q4: 'justice - education - q4 - ans',
+      q5: 'justice - education - q5 - ans',
+      q6: 'justice - education - q6 - ans',
     },
     business: {
       q1: 'justice - business - q1 - ans',
@@ -469,6 +481,7 @@ export const tarotData = [
   },
   {
     id: 12,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Hanged Man',
     zodiac: 'Neptune',
     numerology: 12,
@@ -489,13 +502,13 @@ export const tarotData = [
       q6: 'the hanged man - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the hanged man - health - q1 - ans',
-      q2: 'the hanged man - health - q2 - ans',
-      q3: 'the hanged man - health - q3 - ans',
-      q4: 'the hanged man - health - q4 - ans',
-      q5: 'the hanged man - health - q5 - ans',
-      q6: 'the hanged man - health - q6 - ans',
+      // Changed from education
+      q1: 'the hanged man - education - q1 - ans',
+      q2: 'the hanged man - education - q2 - ans',
+      q3: 'the hanged man - education - q3 - ans',
+      q4: 'the hanged man - education - q4 - ans',
+      q5: 'the hanged man - education - q5 - ans',
+      q6: 'the hanged man - education - q6 - ans',
     },
     business: {
       q1: 'the hanged man - business - q1 - ans',
@@ -508,6 +521,7 @@ export const tarotData = [
   },
   {
     id: 13,
+    img: '/tarot_images/fool.jpg',
     card_name: 'Death',
     zodiac: 'Scorpio',
     numerology: 13,
@@ -528,13 +542,13 @@ export const tarotData = [
       q6: 'death - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'death - health - q1 - ans',
-      q2: 'death - health - q2 - ans',
-      q3: 'death - health - q3 - ans',
-      q4: 'death - health - q4 - ans',
-      q5: 'death - health - q5 - ans',
-      q6: 'death - health - q6 - ans',
+      // Changed from education
+      q1: 'death - education - q1 - ans',
+      q2: 'death - education - q2 - ans',
+      q3: 'death - education - q3 - ans',
+      q4: 'death - education - q4 - ans',
+      q5: 'death - education - q5 - ans',
+      q6: 'death - education - q6 - ans',
     },
     business: {
       q1: 'death - business - q1 - ans',
@@ -547,6 +561,7 @@ export const tarotData = [
   },
   {
     id: 14,
+    img: '/tarot_images/fool.jpg',
     card_name: 'Temperance',
     zodiac: 'Sagittarius',
     numerology: 14,
@@ -567,13 +582,13 @@ export const tarotData = [
       q6: 'temperance - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'temperance - health - q1 - ans',
-      q2: 'temperance - health - q2 - ans',
-      q3: 'temperance - health - q3 - ans',
-      q4: 'temperance - health - q4 - ans',
-      q5: 'temperance - health - q5 - ans',
-      q6: 'temperance - health - q6 - ans',
+      // Changed from education
+      q1: 'temperance - education - q1 - ans',
+      q2: 'temperance - education - q2 - ans',
+      q3: 'temperance - education - q3 - ans',
+      q4: 'temperance - education - q4 - ans',
+      q5: 'temperance - education - q5 - ans',
+      q6: 'temperance - education - q6 - ans',
     },
     business: {
       q1: 'temperance - business - q1 - ans',
@@ -586,6 +601,7 @@ export const tarotData = [
   },
   {
     id: 15,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Devil',
     zodiac: 'Capricorn',
     numerology: 15,
@@ -606,13 +622,13 @@ export const tarotData = [
       q6: 'the devil - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the devil - health - q1 - ans',
-      q2: 'the devil - health - q2 - ans',
-      q3: 'the devil - health - q3 - ans',
-      q4: 'the devil - health - q4 - ans',
-      q5: 'the devil - health - q5 - ans',
-      q6: 'the devil - health - q6 - ans',
+      // Changed from education
+      q1: 'the devil - education - q1 - ans',
+      q2: 'the devil - education - q2 - ans',
+      q3: 'the devil - education - q3 - ans',
+      q4: 'the devil - education - q4 - ans',
+      q5: 'the devil - education - q5 - ans',
+      q6: 'the devil - education - q6 - ans',
     },
     business: {
       q1: 'the devil - business - q1 - ans',
@@ -625,6 +641,7 @@ export const tarotData = [
   },
   {
     id: 16,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Tower',
     zodiac: 'Mars',
     numerology: 16,
@@ -645,13 +662,13 @@ export const tarotData = [
       q6: 'the tower - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the tower - health - q1 - ans',
-      q2: 'the tower - health - q2 - ans',
-      q3: 'the tower - health - q3 - ans',
-      q4: 'the tower - health - q4 - ans',
-      q5: 'the tower - health - q5 - ans',
-      q6: 'the tower - health - q6 - ans',
+      // Changed from education
+      q1: 'the tower - education - q1 - ans',
+      q2: 'the tower - education - q2 - ans',
+      q3: 'the tower - education - q3 - ans',
+      q4: 'the tower - education - q4 - ans',
+      q5: 'the tower - education - q5 - ans',
+      q6: 'the tower - education - q6 - ans',
     },
     business: {
       q1: 'the tower - business - q1 - ans',
@@ -664,6 +681,7 @@ export const tarotData = [
   },
   {
     id: 17,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Star',
     zodiac: 'Aquarius',
     numerology: 17,
@@ -684,13 +702,13 @@ export const tarotData = [
       q6: 'the star - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the star - health - q1 - ans',
-      q2: 'the star - health - q2 - ans',
-      q3: 'the star - health - q3 - ans',
-      q4: 'the star - health - q4 - ans',
-      q5: 'the star - health - q5 - ans',
-      q6: 'the star - health - q6 - ans',
+      // Changed from education
+      q1: 'the star - education - q1 - ans',
+      q2: 'the star - education - q2 - ans',
+      q3: 'the star - education - q3 - ans',
+      q4: 'the star - education - q4 - ans',
+      q5: 'the star - education - q5 - ans',
+      q6: 'the star - education - q6 - ans',
     },
     business: {
       q1: 'the star - business - q1 - ans',
@@ -703,6 +721,7 @@ export const tarotData = [
   },
   {
     id: 18,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Moon',
     zodiac: 'Pisces',
     numerology: 18,
@@ -723,13 +742,13 @@ export const tarotData = [
       q6: 'the moon - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the moon - health - q1 - ans',
-      q2: 'the moon - health - q2 - ans',
-      q3: 'the moon - health - q3 - ans',
-      q4: 'the moon - health - q4 - ans',
-      q5: 'the moon - health - q5 - ans',
-      q6: 'the moon - health - q6 - ans',
+      // Changed from education
+      q1: 'the moon - education - q1 - ans',
+      q2: 'the moon - education - q2 - ans',
+      q3: 'the moon - education - q3 - ans',
+      q4: 'the moon - education - q4 - ans',
+      q5: 'the moon - education - q5 - ans',
+      q6: 'the moon - education - q6 - ans',
     },
     business: {
       q1: 'the moon - business - q1 - ans',
@@ -742,6 +761,7 @@ export const tarotData = [
   },
   {
     id: 19,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The Sun',
     zodiac: 'Sun',
     numerology: 19,
@@ -762,13 +782,13 @@ export const tarotData = [
       q6: 'the sun - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the sun - health - q1 - ans',
-      q2: 'the sun - health - q2 - ans',
-      q3: 'the sun - health - q3 - ans',
-      q4: 'the sun - health - q4 - ans',
-      q5: 'the sun - health - q5 - ans',
-      q6: 'the sun - health - q6 - ans',
+      // Changed from education
+      q1: 'the sun - education - q1 - ans',
+      q2: 'the sun - education - q2 - ans',
+      q3: 'the sun - education - q3 - ans',
+      q4: 'the sun - education - q4 - ans',
+      q5: 'the sun - education - q5 - ans',
+      q6: 'the sun - education - q6 - ans',
     },
     business: {
       q1: 'the sun - business - q1 - ans',
@@ -781,6 +801,7 @@ export const tarotData = [
   },
   {
     id: 20,
+    img: '/tarot_images/fool.jpg',
     card_name: 'Judgement',
     zodiac: 'Pluto',
     numerology: 20,
@@ -801,13 +822,13 @@ export const tarotData = [
       q6: 'judgement - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'judgement - health - q1 - ans',
-      q2: 'judgement - health - q2 - ans',
-      q3: 'judgement - health - q3 - ans',
-      q4: 'judgement - health - q4 - ans',
-      q5: 'judgement - health - q5 - ans',
-      q6: 'judgement - health - q6 - ans',
+      // Changed from education
+      q1: 'judgement - education - q1 - ans',
+      q2: 'judgement - education - q2 - ans',
+      q3: 'judgement - education - q3 - ans',
+      q4: 'judgement - education - q4 - ans',
+      q5: 'judgement - education - q5 - ans',
+      q6: 'judgement - education - q6 - ans',
     },
     business: {
       q1: 'judgement - business - q1 - ans',
@@ -820,6 +841,7 @@ export const tarotData = [
   },
   {
     id: 21,
+    img: '/tarot_images/fool.jpg',
     card_name: 'The World',
     zodiac: 'Saturn',
     numerology: 21,
@@ -840,13 +862,13 @@ export const tarotData = [
       q6: 'the world - love - q6 - ans',
     },
     education: {
-      // Changed from health
-      q1: 'the world - health - q1 - ans',
-      q2: 'the world - health - q2 - ans',
-      q3: 'the world - health - q3 - ans',
-      q4: 'the world - health - q4 - ans',
-      q5: 'the world - health - q5 - ans',
-      q6: 'the world - health - q6 - ans',
+      // Changed from education
+      q1: 'the world - education - q1 - ans',
+      q2: 'the world - education - q2 - ans',
+      q3: 'the world - education - q3 - ans',
+      q4: 'the world - education - q4 - ans',
+      q5: 'the world - education - q5 - ans',
+      q6: 'the world - education - q6 - ans',
     },
     business: {
       q1: 'the world - business - q1 - ans',

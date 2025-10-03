@@ -13,12 +13,12 @@ const Readings = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const router = useRouter()
   const questions = questionData.find((item) => item.key === formData.topic)
-  console.log(userSelectedTarotData)
 
   // Redirect if no form or tarot data
   useEffect(() => {
     if (
-      !formData?.name ||
+      !formData?.user_name ||
+      !formData?.full_name ||
       !formData?.dob ||
       !userSelectedTarotData ||
       userSelectedTarotData.length === 0
@@ -44,24 +44,67 @@ const Readings = () => {
   const answer = card?.[formData.topic]?.[questionKey]
 
   return (
-    <div className="min-h-screen pt-24 px-4 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
+    <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
       <MainMenuBtn />
-
       {/* User Info */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 ">
-        <div className="bg-[#ffffff8b] py-3 px-5 rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5]">
-          Name: {formData.name}
+      <div className="flex pt-[16px] items-center justify-between ">
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[64px] rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5] flex flex-col items-center justify-center">
+          <p className="mb-[8px]">Your Zodiac Sign</p>
+          <Image
+            src={'/system_images/virgo.png'}
+            height={64}
+            width={64}
+            alt="Virgo"
+          />
         </div>
-        <div className="bg-[#ffffff8b] py-3 px-5 rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5]">
-          Birthday: {formData.dob}
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[56px] rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5] flex flex-col items-center justify-center">
+          <p className="">Your Numerology Value</p>
+          <p className="font-bold text-[60px] text-[#9798F5]">9</p>
+        </div>
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[32px] rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5] flex flex-col items-center justify-center">
+          <table>
+            <tbody className="text-left">
+              <tr>
+                <td className="pr-[8px] pb-[8px]">User name:</td>
+                <td className="pb-[8px]">{formData.user_name}</td>
+              </tr>
+              <tr>
+                <td className="pr-[8px] pb-[8px]">Full name:</td>
+                <td className="pb-[8px]">{formData.full_name}</td>
+              </tr>
+              <tr>
+                <td className="pr-[8px] pb-[8px]">Birthday:</td>
+                <td className="pb-[8px]">{formData.dob}</td>
+              </tr>
+              <tr>
+                <td className="pr-[8px] pb-[8px]">Major:</td>
+                <td className="pb-[8px]">{formData.major}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[56px] rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5] flex flex-col items-center justify-center">
+          <table>
+            <tbody className="text-left">
+              <tr>
+                <td className="pr-[8px] pb-[8px]">Read at:</td>
+                <td className="pb-[8px]">21.9.2025 11:00 AM</td>
+              </tr>
+              <tr>
+                <td className="pr-[8px] pb-[8px]">Category:</td>
+                <td className="pb-[8px]">{questions?.label}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
       {/* Card Result */}
       {card && (
-        <div className="flex-grow mt-8 mb-6 bg-[#ffffff3f] rounded-[32px] border-2 border-[#9798F5] p-5 sm:p-8 md:p-10 shadow-xl relative  flex flex-col justify-between max-h-[calc(100vh-200px)]">
+        <div className="flex-grow mt-[16px] mb-6 bg-[#ffffff3f] rounded-[16px] border-2 border-[#9798F5] p-5 sm:p-8 md:p-10 shadow-xl relative  flex flex-col justify-between max-h-[calc(100vh-200px)]">
           {/*Title*/}
-          <div className="flex items-center justify-center absolute top-[-40px] z-50 left-0 right-0">
+          <div className="flex items-center justify-center absolute top-[4px] z-50 left-0 right-0">
             <h3 className="bg-white text-center px-[80px] py-2 mt-3 rounded-[24px] border-2 shadow-md border-[#9798F5] text-dark_p font-bold text-lg">
               {questions.label}
             </h3>
@@ -121,11 +164,11 @@ const Readings = () => {
           </button>
 
           {/* Pagination Dots */}
-          <div className="flex justify-center mt-8 gap-2">
+          <div className="flex justify-center mt-4 gap-2">
             {userSelectedTarotData.map((_, i) => (
               <span
                 key={i}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                className={`w-6 h-2 rounded-full transition-all duration-300 ${
                   i === currentIndex ? 'bg-[#8854d0]' : 'bg-gray-300'
                 }`}
               ></span>

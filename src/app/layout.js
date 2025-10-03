@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-custom-gradient relative min-h-screen overflow-hidden">
+      <body className="bg-custom-gradient relative min-w-full ">
         <FormProvider>
           <TarotProvider>{children}</TarotProvider>
         </FormProvider>

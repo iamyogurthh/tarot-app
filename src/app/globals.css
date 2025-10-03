@@ -29,6 +29,14 @@ body {
   @apply text-[var(--text-color)];
 }
 
+.text_primary {
+  @apply text-[var(--main-color)];
+}
+
+.active {
+  @apply text-white bg-[var(--main-color)]  shadow-lg;
+}
+
 @keyframes float {
   0% {
     transform: translateY(0);
@@ -102,4 +110,12 @@ body {
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE & Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.active_btn {
+  @apply bg-[#9798F5] text-white;
+}
+
+.primary_btn {
+  @apply cursor-pointer bg-[#9799f577] px-[32px] py-[8px] rounded-[24px] font-semibold shadow-lg text-[var(--text-color)];
 }

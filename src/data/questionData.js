@@ -1,5 +1,6 @@
 export const questionData = [
   {
+    id: '0',
     key: 'love',
     label: 'အချစ်ရေး',
     questions: {
@@ -12,6 +13,7 @@ export const questionData = [
     },
   },
   {
+    id: '1',
     key: 'business',
     label: 'ငွေရေးကြေးရေး',
     questions: {
@@ -24,6 +26,7 @@ export const questionData = [
     },
   },
   {
+    id: '2',
     key: 'education',
     label: 'ပညာရေး',
     questions: {
@@ -36,6 +39,7 @@ export const questionData = [
     },
   },
   {
+    id: '3',
     key: 'general',
     label: 'အထွေအထွေ',
     questions: {

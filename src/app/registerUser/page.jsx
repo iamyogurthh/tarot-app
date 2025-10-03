@@ -1,8 +1,9 @@
 import UserInputForm from '@/components/UserInputForm'
+import UserRegisterForm from '@/components/UserRegisterForm'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Home() {
+export default function RegisterUser() {
   return (
     <div className="relative min-h-screen p-[24px]">
       {/* Top-right History Button */}
@@ -25,9 +26,9 @@ export default function Home() {
           className="object-cover mb-[16px] animate-float"
         />
         <div className="animate-fade-in-up mb-[16px] bg-white px-[48px] py-[8px] rounded-[16px] shadow-lg border-[#9798F5] border-2 text-[#654597] font-bold">
-          Login
+          Register New User
         </div>
-        <UserInputForm />
+        <UserRegisterForm />
       </div>
     </div>
   )

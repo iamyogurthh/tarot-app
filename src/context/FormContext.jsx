@@ -6,7 +6,8 @@ const FormContext = createContext()
 export const FormProvider = ({ children }) => {
   const [formData, setFormData] = useState({
     topic: '',
-    name: '',
+    user_name: '',
+    full_name: '',
     dob: '',
     major: '',
   })
@@ -18,7 +19,8 @@ export const FormProvider = ({ children }) => {
   const clearForm = () => {
     setFormData({
       topic: '',
-      name: '',
+      user_name: '',
+      full_name: '',
       dob: '',
       major: '',
     })
