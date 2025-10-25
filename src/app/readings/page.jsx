@@ -14,7 +14,7 @@ const Readings = () => {
   const router = useRouter()
   const questions = questionData.find((item) => item.key === formData.topic)
 
-  // Redirect if no form or tarot data
+  // Redirect if missing data
   useEffect(() => {
     if (
       !formData?.user_name ||
@@ -40,28 +40,32 @@ const Readings = () => {
   }
 
   const card = userSelectedTarotData[currentIndex]
-  const questionKey = `q${currentIndex + 1}`
-  const answer = card?.[formData.topic]?.[questionKey]
+  const topic = formData.topic
+  const topicQuestions = card?.[topic] || [] // e.g. card.business or card.love
+  const currentQuestion = topicQuestions[currentIndex] || {}
 
   return (
     <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
       <MainMenuBtn />
-      {/* User Info */}
-      <div className="flex pt-[16px] items-center justify-between ">
-        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[64px] rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5] flex flex-col items-center justify-center">
+
+      {/* User Info Section */}
+      <div className="flex pt-[16px] items-center justify-between  gap-4">
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[64px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <p className="mb-[8px]">Your Zodiac Sign</p>
           <Image
-            src={'/system_images/virgo.png'}
+            src={`/system_images/virgo.png`}
             height={64}
             width={64}
-            alt="Virgo"
+            alt={'Zodiac'}
           />
         </div>
-        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[56px] rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5] flex flex-col items-center justify-center">
-          <p className="">Your Numerology Value</p>
-          <p className="font-bold text-[60px] text-[#9798F5]">9</p>
+
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[56px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
+          <p>Your Numerology Value</p>
+          <p className="font-bold text-[60px] text-[#9798F5]">5</p>
         </div>
-        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[32px] rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5] flex flex-col items-center justify-center">
+
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[32px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <table>
             <tbody className="text-left">
               <tr>
@@ -84,59 +88,59 @@ const Readings = () => {
           </table>
         </div>
 
-        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[56px] rounded-2xl font-semibold shadow-md text-center w-full sm:w-auto border-2 border-[#9798F5] flex flex-col items-center justify-center">
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[16px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <table>
             <tbody className="text-left">
               <tr>
                 <td className="pr-[8px] pb-[8px]">Read at:</td>
-                <td className="pb-[8px]">21.9.2025 11:00 AM</td>
+                <td className="pb-[8px]">
+                  {new Date().toLocaleString('en-GB')}
+                </td>
               </tr>
               <tr>
                 <td className="pr-[8px] pb-[8px]">Category:</td>
-                <td className="pb-[8px]">{questions?.label}</td>
+                <td className="pb-[8px]">{questions?.label || topic}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Card Result */}
+      {/* Card Reading */}
       {card && (
-        <div className="flex-grow mt-[16px] mb-6 bg-[#ffffff3f] rounded-[16px] border-2 border-[#9798F5] p-5 sm:p-8 md:p-10 shadow-xl relative  flex flex-col justify-between max-h-[calc(100vh-200px)]">
-          {/*Title*/}
+        <div className="flex-grow mt-[16px] mb-6 bg-[#ffffff3f] rounded-[16px] border-2 border-[#9798F5] p-5 sm:p-8 md:p-10 shadow-xl relative flex flex-col justify-between">
+          {/* Title */}
           <div className="flex items-center justify-center absolute top-[4px] z-50 left-0 right-0">
             <h3 className="bg-white text-center px-[80px] py-2 mt-3 rounded-[24px] border-2 shadow-md border-[#9798F5] text-dark_p font-bold text-lg">
-              {questions.label}
+              {card.name}
             </h3>
           </div>
-          <div className="  flex flex-col py-[80px] px-[40px] md:flex-row items-top justify-center gap-y-8 gap-x-16 w-full  text-center">
+
+          <div className="flex flex-col py-[80px] px-[40px] md:flex-row items-top justify-center gap-y-8 gap-x-16 w-full text-center">
             {/* Card Image */}
-            <div className="flex flex-col items-center ">
+            <div className="flex flex-col items-center">
               <Image
-                src="/system_images/tarot_card_back.png" // Replace with dynamic image if needed
-                alt={card.card_name}
+                src={`/tarot_images/${card.image}`}
+                alt={card.name}
                 width={160}
                 height={240}
-                className="rounded-xl shadow-lg"
+                className="rounded-xl shadow-lg object-cover"
               />
-              <h2 className="text-[24px] font-bold mt-4">{card.card_name}</h2>
+              <h2 className="text-[24px] font-bold mt-4">{card.name}</h2>
             </div>
 
-            {/* Card Meaning */}
+            {/* Meaning Section */}
             <div className="flex-1 text-center md:text-left space-y-4">
               <h3 className="text-base sm:text-[24px] font-semibold text-black leading-relaxed">
-                {`${
-                  questions?.questions[`q${currentIndex + 1}`] ||
-                  'မေးခွန်းမရှိပါ။'
-                }`}
+                {currentQuestion?.question_text || 'မေးခွန်းမရှိပါ။'}
               </h3>
               <p className="text-sm sm:text-base text-black/80 leading-relaxed">
-                {answer || 'အဖြေမရှိသေးပါ။'}
+                {currentQuestion?.question_answer || 'အဖြေမရှိသေးပါ။'}
               </p>
             </div>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation Arrows */}
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}

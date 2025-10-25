@@ -5,19 +5,62 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import FullScreenLoader from '@/components/FullScreenLoader'
+import { useTarot } from '@/context/TarotContext'
 
 const Page = () => {
   const { formData, clearForm } = useForm()
   const [hovered, setHovered] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const { setTarotsForSelection } = useTarot()
 
   console.log(formData)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Card stack clicked!')
-    router.push('/cardSelection')
+    setIsSubmitting(true)
+    try {
+      const formDataToSend = new FormData()
+      formDataToSend.append('topic', formData.topic)
+      formDataToSend.append('user_name', formData.user_name)
+      formDataToSend.append('full_name', formData.full_name)
+      formDataToSend.append('dob', formData.dob)
+      formDataToSend.append('major', formData.major)
+
+      if (
+        !formData.topic ||
+        !formData.user_name ||
+        !formData.full_name ||
+        !formData.dob
+      ) {
+        console.error('Form data incomplete')
+        return
+      }
+
+      console.log('FormData To SEND: ' + JSON.stringify(formDataToSend))
+
+      const res = await fetch(`http://localhost:3000/api/users`, {
+        method: 'POST',
+        body: formDataToSend,
+      })
+
+      if (!res.ok) {
+        setIsSubmitting(false)
+        throw new Error('Failed to create user')
+      } else {
+        setIsSubmitting(false)
+        const data = await res.json()
+        console.log('Return from server 10 cards: ' + data)
+        setTarotsForSelection(data)
+        router.push('/cardSelection')
+      }
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
   }
+
+  if (isSubmitting) return <FullScreenLoader text="Fetching data..." />
 
   const cardCount = 4
   const angleStep = 3 // degrees

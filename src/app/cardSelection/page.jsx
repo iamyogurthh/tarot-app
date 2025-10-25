@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useForm } from '@/context/FormContext'
 import { AnimatePresence, motion } from 'framer-motion'
-import { tarotData } from '@/data/tarotData' // Adjust path if needed
 import { useTarot } from '@/context/TarotContext'
 import MainMenuBtn from '@/components/MainMenuBtn'
 
@@ -16,13 +15,14 @@ const CardSelection = () => {
   const [cardsToShow, setCardsToShow] = useState([]) // Cards displayed on screen (10 random)
   const [selectedCards, setSelectedCards] = useState([]) // Cards user actively selects (starts empty)
   const { clearForm } = useForm()
-  const { setUserSelectedTarotData } = useTarot()
+  const { setUserSelectedTarotData, tarotsForSelection } = useTarot()
 
   console.log(selectedCards)
+  console.log('Return form server: ' + JSON.stringify(tarotsForSelection))
 
   useEffect(() => {
     // Pick 10 unique random card indexes from tarotData on mount
-    const indices = [...Array(tarotData.length).keys()]
+    const indices = [...Array(tarotsForSelection.length).keys()]
     const randomTen = indices
       .sort(() => 0.5 - Math.random())
       .slice(0, cardCount)
@@ -43,7 +43,9 @@ const CardSelection = () => {
   }
 
   const handleClick = () => {
-    const selectedTarotCards = selectedCards.map((index) => tarotData[index])
+    const selectedTarotCards = selectedCards.map(
+      (index) => tarotsForSelection[index]
+    )
     setUserSelectedTarotData(selectedTarotCards)
   }
 

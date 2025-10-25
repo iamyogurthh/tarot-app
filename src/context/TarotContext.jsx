@@ -6,10 +6,16 @@ const TarotContext = createContext()
 
 export const TarotProvider = ({ children }) => {
   const [userSelectedTarotData, setUserSelectedTarotData] = useState([])
+  const [tarotsForSelection, setTarotsForSelection] = useState([])
 
   return (
     <TarotContext.Provider
-      value={{ userSelectedTarotData, setUserSelectedTarotData }}
+      value={{
+        userSelectedTarotData,
+        setUserSelectedTarotData,
+        tarotsForSelection,
+        setTarotsForSelection,
+      }}
     >
       {children}
     </TarotContext.Provider>

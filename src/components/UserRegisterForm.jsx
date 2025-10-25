@@ -42,7 +42,12 @@ const UserRegisterForm = () => {
   }
 
   const handleNext = () => {
-    if (!formData.name || !formData.dob || !formData.major) {
+    if (
+      !formData.user_name ||
+      !formData.full_name ||
+      !formData.dob ||
+      !formData.major
+    ) {
       alert('Please fill out all fields.')
       return
     }
