@@ -6,10 +6,7 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     real_name VARCHAR(150),
-    dob DATE,
-    major VARCHAR(100),
-    zodiac VARCHAR(50),
-    numerology VARCHAR(50)
+    major VARCHAR(100)
 );
 
 CREATE TABLE categories (
@@ -20,7 +17,10 @@ CREATE TABLE categories (
 CREATE TABLE readings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    user_name VARCHAR(200) NOT NULL,
+    real_name VARCHAR(200) NOT NULL,
+    dob DATETIME,
+    zodiac VARCHAR(50),
+    numerology VARCHAR(50),
     category_id INT NOT NULL,
     read_at DATETIME NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -70,14 +70,14 @@ CREATE TABLE reading_results (
     FOREIGN KEY (meaning_id) REFERENCES meanings(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (id, name, real_name, dob, major, zodiac, numerology) VALUES
-(1, 'alex', 'alexjohn', '2000-05-12', 'cs', 'taurus', '8'),
-(2, 'alex', 'alexmike', '2000-05-12', 'cs', 'taurus', '8'),
-(3, 'emma', 'emmasmith', '1999-03-08', 'it', 'pisces', '2'),
-(4, 'emma', 'emmajane', '1999-03-08', 'it', 'pisces', '2'),
-(5, 'ryan', 'ryanlee', '2001-11-25', 'se', 'sagittarius', '9'),
-(6, 'ryan', 'ryanjay', '2001-11-25', 'se', 'sagittarius', '9'),
-(7, 'lily', 'lilyrose', '2002-07-14', 'ce', 'cancer', '5');
+INSERT INTO users (id, name, real_name, major) VALUES
+(1, 'alex', 'alexjohn', 'math'),
+(2, 'alex', 'alexmike', 'dg'),
+(3, 'emma', 'emmasmith','ds'),
+(4, 'emma', 'emmajane', 'cs'),
+(5, 'ryan', 'ryanlee', 'es' ),
+(6, 'ryan', 'ryanjay','bs'),
+(7, 'lily', 'lilyrose','cs');
 
 INSERT INTO categories (id, name) VALUES
 (1, 'general'),

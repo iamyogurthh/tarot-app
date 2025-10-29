@@ -21,9 +21,7 @@ export async function getCardsByZodiacNumerologyTopic(zodiac, numerology, topic)
     const categoryId = await getCategoryIDByCategoryName(topic);
     const questions = await getQuestionsByCategoryId(categoryId);
     const [cards] = await pool.query(`
-    SELECT DISTINCT cards.* FROM cards
-    WHERE zodiac = ?
-    OR numerology = ?
+    SELECT * FROM cards
     ORDER BY RAND()
     LIMIT 10;
     `, [zodiac, numerology]);

@@ -1,28 +1,19 @@
 import pool from "@/database/db";
 
-export async function createUser(user_name,full_name,dob,major,zodiac,numerology){
+export async function createUser(user_name,full_name,major){
     const [result] = await pool.query(`
-    INSERT INTO users (name,real_name,dob,major,zodiac,numerology) values
-    (?,?,?,?,?,?)
-    `,[user_name,full_name,dob,major,zodiac,numerology])
+    INSERT INTO users (name,real_name,major) values
+    (?,?,?)
+    `,[user_name,full_name,major])
     if(result){
         return true;
     }
     return false;
 }
 
-
-export async function getUserByUserNameAndRealName(username,realName){
-    const [user] = await pool.query(`
-    select * from users where name=? and real_name=?
-    `,[username,realName]);
-    console.log("Inside the getUserByUserName ",user);
-    return user[0];
-}
-
-export async function getFirstUserByUserName(username){
+export async function getUserByUserName(username){
     const [users] = await pool.query(`
-    select * from users where name=? order by id asc
+    select * from users where name=?
     `,[username]);
     return users[0];
 }

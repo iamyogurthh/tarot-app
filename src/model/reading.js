@@ -5,13 +5,14 @@ import { getMeaningById } from "./meaning";
 import { getUserById } from "./user";
 import { getCategoryByCategoryId } from "./category";
 
-export async function createReading(userId, userName, categoryId) {
+export async function createReading(user_id, real_name, dob, zodiac, numerology, category_id) {
     const [result] = await pool.query(`
-    insert into readings (user_id,user_name,category_id) values (?,?,?)
-    `, [userId, userName, categoryId]
+    insert into readings (user_id,real_name,dob,zodiac,numerology,category_id) values (?,?,?,?,?,?)
+    `, [user_id, real_name, dob, zodiac, numerology, category_id]
     );
     return result.insertId;
 }
+
 
 export async function insertCards(readingId, cardId, questionId, meaningId) {
     const [result] = await pool.query(`
@@ -22,69 +23,69 @@ export async function insertCards(readingId, cardId, questionId, meaningId) {
     return true;
 }
 
-export async function getReadings() {
-    const [readings] = await pool.query(`
-        select r.user_name,u.real_name,u.major,u.dob,min(r.read_at) as first_read from readings as r 
-        inner join 
-        users as u
-        on u.id = r.user_id
-        group by r.user_name
+export async function getUsersList() {
+    const [users] = await pool.query(`
+        select * from users
         `
     );
-    return readings;
+    return users;
 }
 
-export async function getReadingOverviews(userName) {
+export async function getReadingUsersByUserId(userId) {
     const [overviews] = await pool.query(`
-    select * from readings where user_name=? order by read_at desc
-    `, [userName]);
+    select * from readings where user_id=? order by read_at desc
+    `, [userId]);
 
     return overviews
 }
 
-export async function getReadingUserByReadingId(id) {
-    const [overviews] = await pool.query(`
-    select r.user_id,r.category_id,r.read_at from readings r
-    inner join reading_results res
-    on r.id = res.reading_id
-    where res.reading_id=?
+// export async function getReadingUserByReadingId(id) {
+//     const [overviews] = await pool.query(`
+//     select r.user_id,r.category_id,r.read_at from readings r
+//     inner join reading_results res
+//     on r.id = res.reading_id
+//     where res.reading_id=?
+//     `, [id]);
+
+//     return overviews[0];
+// }
+
+export async function getReadingById(id) {
+    const [users] = await pool.query(`
+    select * from readings where id=?
     `, [id]);
 
-    return overviews[0];
+    return users[0];
 }
 
 
 export async function getReadingDetails(readingId) {
     const result = [];
-    const loopResult = [];
-    const readingUser = await getReadingUserByReadingId(readingId);
-    const user = await getUserById(readingUser.user_id);
-    const category = await getCategoryByCategoryId(readingUser.category_id);
+    const reading = await getReadingById(readingId);
+    const user = await getUserById(reading.user_id);
+    const readingResults = await getReadingResultsByReadingId(readingId);
+    const category = await getCategoryByCategoryId(reading.category_id);
     result.push({
-        user_name : user.name,
-        real_name : user.real_name,
-        zodiac : user.zodiac,
-        numerology : user.numerology,
-        dob : user.dob,
-        category,
-        read_at : readingUser.read_at
+        user_name: user.name,
+        real_name: reading.real_name,
+        zodiac: reading.zodiac,
+        numerology: reading.numerology,
+        dob: reading.dob,
+        topic : category,
+        read_at: reading.read_at
     });
 
-    const [details] = await pool.query(`
-    select * from reading_results where reading_id=?
-    `, [readingId]);
-
-    for (let i = 0; i < details.length; i++) {
-        const question = await getQuestionById(details[i].question_id);
-        const card = await getCardById(details[i].card_id);
-        const meaning = await getMeaningById(details[i].meaning_id);
+    for (let i = 0; i < readingResults.length; i++) {
+        const question = await getQuestionById(readingResults[i].question_id);
+        const card = await getCardById(readingResults[i].card_id);
+        const meaning = await getMeaningById(readingResults[i].meaning_id);
         result.push({
             card_id: card.id,
             name: card.name,
             zodiac: card.zodiac,
             numerology: card.numerology,
             image: card.image,
-            category,
+            topic : category,
             [category]: {
                 question_id: question.id,
                 question_text: question.question_text,
@@ -94,4 +95,12 @@ export async function getReadingDetails(readingId) {
         });
     }
     return result;
+}
+
+
+export async function getReadingResultsByReadingId(id){
+    const [details] = await pool.query(`
+    select * from reading_results where reading_id=?
+    `, [id]);
+    return details;
 }

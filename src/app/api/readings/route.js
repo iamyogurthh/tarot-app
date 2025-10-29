@@ -1,32 +1,31 @@
 import { getCategoryIDByCategoryName } from "@/model/category";
-import { createReading, insertCards } from "@/model/reading";
-import { getUserByUserNameAndRealName } from "@/model/user";
+import { getReadingById, insertCards } from "@/model/reading";
 
 export async function POST(req, res) {
     const data = await req.json();
     let result = [];
-    const user = await getUserByUserNameAndRealName(data.user_name,data.full_name);
-    if(!user){
-        return Response.json({message : "User with this username doesn't exist"})
+
+    const reading = await getReadingById(data.user_reading_id);
+
+    if(!reading){
+        return Response.json({message : "Reading with this id doesn't exist"},{status : 400});
     }
 
-    const category_id = await getCategoryIDByCategoryName(data.category);
-    for (let i = 0; i < data[data.category].length; i++) {
+    for (let i = 0; i < data[data.topic].length; i++) {
         result.push({
-            card_id: data[data.category][i].card_id,
-            question_id: data[data.category][i].question_id,
-            meaning_id: data[data.category][i].meaning_id
+            card_id: data[data.topic][i].card_id,
+            question_id: data[data.topic][i].question_id,
+            meaning_id: data[data.topic][i].meaning_id
         })
     }
 
-    const reading_id = await createReading(user.id,user.name, category_id);
     for (let i = 0; i < result.length; i++) {
         const insertResult = await insertCards(
-            reading_id,
+            data.user_reading_id,
             result[i].card_id,
             result[i].question_id,
             result[i].meaning_id)
     }
-    return Response.json({message : "Request Successful"});
+    return Response.json({message : "Successfully added"});
 }
 

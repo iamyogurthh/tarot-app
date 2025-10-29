@@ -2,6 +2,8 @@
 POST - http://localhost:3000/api/users
 Form Data - topic,user_name,full_name,dob,major
 response - [
+    "user_reading_id": 2,
+    "cards" : [
     {
         "card_id": 75,
         "name": "Knight of Pentacles",
@@ -94,15 +96,14 @@ response - [
             }
         ]
     },
-    ....
+    ....]
 ]
 
        To Insert Card Record Related To The User
 POST - http://localhost:3000/api/readings
 Json Data - {
-   "user_name" : "mgmg",
-   "full_name" : "mgmg",
-   "category" : "love",
+   "user_reading_id" : 1,
+   "topic" : "love",
    "love" : [
        {
            "card_id" : 1,
@@ -118,7 +119,7 @@ Json Data - {
    ]
 }
 Response - {
-    message : Request Successful
+    message : Successfully added
 }
 
 
@@ -130,15 +131,11 @@ Response - [
         "user_name":"alex",
         "real_name":"alexjohn",
         "major":"cs",
-        "dob":"2000-05-11T17:30:00.000Z",
-        "first_read":"2025-10-21T04:37:01.000Z"
     },
     {
         "user_name":"emma",
         "real_name":"emmasmith",
         "major":"it",
-        "dob":"1999-03-07T17:30:00.000Z",
-        "first_read":"2025-10-21T04:26:29.000Z"
     },
     ....
 
@@ -147,43 +144,38 @@ Response - [
 
 
         To get a list of reading related to the user_name
-Get - http://localhost:3000/api/readings/[user_name]
+Get - http://localhost:3000/api/readings/[user_id]
 Response - [
     {
-        "id": 3,
-        "name": "emma",
-        "real_name": "emmasmith",
-        "dob": "1999-03-07T17:30:00.000Z",
-        "major": "it",
-        "zodiac": "pisces",
-        "numerology": "2"
+        "reading_id": 2,
+        "user_name": "alex",
+        "full_name": "phyolay",
+        "topic": "business",
+        "read_at": "2025-10-29T05:17:25.000Z"
     },
     {
-        "reading_id": 4,
-        "category": "love",
-        "read_at": "2025-10-21T04:27:04.000Z"
+        "reading_id": 1,
+        "user_name": "alex",
+        "full_name": "phyolay",
+        "topic": "business",
+        "read_at": "2025-10-29T05:16:19.000Z"
     },
-    {
-        "reading_id": 3,
-        "category": "love",
-        "read_at": "2025-10-21T04:26:29.000Z"
-    },
-    .....
+    ....
 ]
 
 
 
         To get a history of the what the user have read_at
-Get - http://localhost:3000/api/readings/[user_name]/[reading_id]
+Get - http://localhost:3000/api/readings/[user_id]/[reading_id]
 Response - [
     {
-        "user_name": "emma",
-        "real_name": "emmajane",
-        "zodiac": "pisces",
-        "numerology": "2",
-        "dob": "1999-03-07T17:30:00.000Z",
-        "category": "love",
-        "read_at": "2025-10-21T04:27:04.000Z"
+        "user_name": "alex",
+        "real_name": "phyolay",
+        "zodiac": "Taurus",
+        "numerology": "3",
+        "dob": "2004-04-28T17:30:00.000Z",
+        "topic": "business",
+        "read_at": "2025-10-29T05:17:25.000Z"
     },
     {
         "card_id": 1,
@@ -191,8 +183,8 @@ Response - [
         "zodiac": "Uranus",
         "numerology": "0",
         "image": "fool.jpg",
-        "category": "love",
-        "love": {
+        "topic": "business",
+        "business": {
             "question_id": 1,
             "question_text": "သင့်ကိုယ်သင် ဘယ်လိုခံစားနေရလဲ။",
             "meaning_id": 1,
@@ -205,8 +197,8 @@ Response - [
         "zodiac": "Mercury",
         "numerology": "1",
         "image": "magician.jpg",
-        "category": "love",
-        "love": {
+        "topic": "business",
+        "business": {
             "question_id": 2,
             "question_text": "အခုအချိန်မှာ သင်ဘာကို အလိုချင်ဆုံးလဲ။",
             "meaning_id": 2,
@@ -219,13 +211,13 @@ Response - [
         "zodiac": "Moon",
         "numerology": "2",
         "image": "high_priestess.jpg",
-        "category": "love",
-        "love": {
+        "topic": "business",
+        "business": {
             "question_id": 3,
             "question_text": "သင် ဘာတွေကို ကြောက်ရွံနေလဲ။",
             "meaning_id": 3,
             "question_answer": "သတ်မှတ်ထားတာမရှိတာ၊ ဘာမှမသေချာတာတွေကို ကြောက်နေပါတယ်။ မျှော်လင့်ချက်မဲ့ဖြစ်သွားမှာကို သတိထားနေတတ်ပါတယ်။"
         }
     },
-    ......
+    ....
 ]
