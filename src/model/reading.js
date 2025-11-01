@@ -5,10 +5,10 @@ import { getMeaningById } from "./meaning";
 import { getUserById } from "./user";
 import { getCategoryByCategoryId } from "./category";
 
-export async function createReading(user_id, real_name, dob, zodiac, numerology, category_id) {
+export async function createReading(user_id, real_name, dob, major,zodiac, numerology, category_id) {
     const [result] = await pool.query(`
-    insert into readings (user_id,real_name,dob,zodiac,numerology,category_id) values (?,?,?,?,?,?)
-    `, [user_id, real_name, dob, zodiac, numerology, category_id]
+    insert into readings (user_id,real_name,dob,major,zodiac,numerology,category_id) values (?,?,?,?,?,?,?)
+    `, [user_id, real_name, dob,major, zodiac, numerology, category_id]
     );
     return result.insertId;
 }
@@ -68,6 +68,7 @@ export async function getReadingDetails(readingId) {
     result.push({
         user_name: user.name,
         real_name: reading.real_name,
+        major : reading.major,
         zodiac: reading.zodiac,
         numerology: reading.numerology,
         dob: reading.dob,

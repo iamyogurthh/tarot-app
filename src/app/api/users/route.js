@@ -6,12 +6,13 @@ import { getZodiacSign } from '@/utils/utils'
 export async function POST(req) {
     const formData = await req.formData();
         console.log(formData)
-        let { topic, user_id, real_name,dob } = getDataFromForm(
+        let { topic, user_id, real_name,dob,major } = getDataFromForm(
             formData,
             'topic',
             'user_id',
             'real_name',
-            'dob'
+            'dob',
+            'major'
         )
   
   let zodiac = getZodiacSign(dob)
@@ -22,6 +23,7 @@ export async function POST(req) {
     user_id,
     real_name,
     dob,
+    major,
     zodiac,
     numerology,
     category_id
@@ -30,5 +32,5 @@ export async function POST(req) {
     return Response.json({ message: 'User cannot be created and cannot be read' })
   }
   const cards = await getCardsByZodiacNumerologyTopic(zodiac, numerology, topic,readingId)
-  return Response.json({cards , user_reading_id : readingId});
+  return Response.json({user_reading_id : readingId , cards});
 }

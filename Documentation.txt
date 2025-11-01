@@ -1,6 +1,22 @@
-        To Create User and get 10 cards related to users
+        To register a User
+POST - http://localhost:3000/api/register
+Form Data - user_name, real_name, dob
+Response - Registered successfully
+
+
+        To login a User
+POST - http://localhost:3000/api/login
+Form Data - user_name
+Response - {
+    "user_id": 4
+}
+
+
+
+        To get 10 cards related to users
+
 POST - http://localhost:3000/api/users
-Form Data - topic,user_name,full_name,dob,major
+Form Data - topic , user_id , full_name , dob , major
 response - [
     "user_reading_id": 2,
     "cards" : [
@@ -171,6 +187,7 @@ Response - [
     {
         "user_name": "alex",
         "real_name": "phyolay",
+        "major" : "cs",
         "zodiac": "Taurus",
         "numerology": "3",
         "dob": "2004-04-28T17:30:00.000Z",

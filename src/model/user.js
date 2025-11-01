@@ -1,10 +1,10 @@
 import pool from "@/database/db";
 
-export async function createUser(user_name,full_name,major){
+export async function createUser(user_name,full_name,dob){
     const [result] = await pool.query(`
-    INSERT INTO users (name,real_name,major) values
+    INSERT INTO users (name,real_name,dob) values
     (?,?,?)
-    `,[user_name,full_name,major])
+    `,[user_name,full_name,dob])
     if(result){
         return true;
     }
