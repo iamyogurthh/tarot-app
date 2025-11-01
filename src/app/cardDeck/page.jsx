@@ -23,8 +23,8 @@ const Page = () => {
     try {
       const formDataToSend = new FormData()
       formDataToSend.append('topic', formData.topic)
-      formDataToSend.append('user_name', formData.user_name)
-      formDataToSend.append('full_name', formData.full_name)
+      formDataToSend.append('user_id', formData.user_id)
+      formDataToSend.append('real_name', formData.full_name)
       formDataToSend.append('dob', formData.dob)
       formDataToSend.append('major', formData.major)
 
@@ -32,13 +32,12 @@ const Page = () => {
         !formData.topic ||
         !formData.user_name ||
         !formData.full_name ||
-        !formData.dob
+        !formData.dob ||
+        !formData.major
       ) {
         console.error('Form data incomplete')
         return
       }
-
-      console.log('FormData To SEND: ' + JSON.stringify(formDataToSend))
 
       const res = await fetch(`http://localhost:3000/api/users`, {
         method: 'POST',

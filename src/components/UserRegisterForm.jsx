@@ -1,61 +1,61 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from '@/context/FormContext'
 import Link from 'next/link'
-
-const majors = [
-  'Myanmar',
-  'English',
-  'Geography',
-  'History',
-  'Archaeology',
-  'Oriental Studies',
-  'Library and Information Studies',
-  'Philosophy',
-  'Psychology',
-  'Anthropology',
-  'International Relations',
-  'Botany',
-  'Microbiology',
-  'Geology',
-  'Chemistry',
-  'Biochemistry',
-  'Industrial Chemistry',
-  'Computer Science',
-  'Mathematics',
-  'Nuclear Physics',
-  'Physics',
-  'Zoology',
-  'Sport Science',
-  'Law',
-]
+import FullScreenLoader from './FullScreenLoader'
 
 const UserRegisterForm = () => {
   const router = useRouter()
-  const { formData, updateField } = useForm()
+  const { formData, updateField, clearForm } = useForm()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
     updateField(name, value)
   }
 
-  const handleNext = () => {
-    if (
-      !formData.user_name ||
-      !formData.full_name ||
-      !formData.dob ||
-      !formData.major
-    ) {
+  console.log(formData)
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+    if (!formData.user_name || !formData.full_name || !formData.dob) {
       alert('Please fill out all fields.')
       return
     }
-    router.push('/chooseTopic')
+    setIsLoading(true)
+
+    try {
+      const formDataToSend = new FormData()
+      formDataToSend.append('user_name', formData.user_name)
+      formDataToSend.append('real_name', formData.full_name)
+      formDataToSend.append('dob', formData.dob)
+
+      const req = await fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        body: formDataToSend,
+      })
+      const data = await req.json()
+
+      if (!req.ok) {
+        alert(data.message || 'User registration failed')
+        return
+      }
+
+      alert('User Registered Successfully')
+      clearForm()
+      router.push('/')
+    } catch (error) {
+      console.error(error)
+      alert('Registration failed. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <div className="animate-fade-in-up">
+    <form onSubmit={handleSubmit} className="animate-fade-in-up">
+      {isLoading && <FullScreenLoader />}
       {/*User Name */}
       <div className="fade-in-up fade-delay-1 mb-[16px]">
         <label htmlFor="user_name" className="font-bold text-dark_p">
@@ -106,34 +106,10 @@ const UserRegisterForm = () => {
         />
       </div>
 
-      {/* Major selection */}
-      <div className="fade-in-up fade-delay-3 mb-[40px]">
-        <label htmlFor="major" className="font-bold text-dark_p">
-          Major
-        </label>
-        <br />
-        <select
-          id="major"
-          name="major"
-          value={formData.major}
-          onChange={handleChange}
-          className="mt-[8px] w-[328px] px-[16px] py-[8px] bg-white border-2 border-[#9798F5] rounded-[24px] shadow-lg appearance-none"
-        >
-          <option value="" disabled>
-            Select your major
-          </option>
-          {majors.map((major) => (
-            <option key={major} value={major}>
-              {major}
-            </option>
-          ))}
-        </select>
-      </div>
-
       {/* Submit button */}
       <div className="fade-in-up fade-delay-4 flex justify-center">
         <button
-          onClick={handleNext}
+          type="submit"
           className="cursor-pointer px-[32px] py-[10px] rounded-[24px] font-bold text-dark_p border-2 border-[#9798F5] bg-gradient-to-r from-[#cbccfa] to-[#9798f5] shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:brightness-110"
         >
           Register
@@ -147,7 +123,7 @@ const UserRegisterForm = () => {
           Already have an account? Login
         </Link>
       </div>
-    </div>
+    </form>
   )
 }
 

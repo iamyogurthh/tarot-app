@@ -10,6 +10,7 @@ export const FormProvider = ({ children }) => {
     full_name: '',
     dob: '',
     major: '',
+    user_id: '',
   })
 
   const updateField = (field, value) => {
@@ -23,6 +24,7 @@ export const FormProvider = ({ children }) => {
       full_name: '',
       dob: '',
       major: '',
+      user_id: '',
     })
   }
 
