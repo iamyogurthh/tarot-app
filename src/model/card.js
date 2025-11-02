@@ -9,22 +9,22 @@ export async function getAllCards() {
     return rows;
 }
 
-export async function getCardById(id){
+export async function getCardById(id) {
     const [card] = await pool.query(`
-    SELECT * FROM cards where id=?`,[id]);
+    SELECT * FROM cards where id=?`, [id]);
     return card[0];
 }
 
-export async function getCardsByZodiacNumerologyTopic(zodiac, numerology, topic) {
+export async function getCards(topic) {
     let result = []
-    let loopResult = [];
     const categoryId = await getCategoryIDByCategoryName(topic);
     const questions = await getQuestionsByCategoryId(categoryId);
     const [cards] = await pool.query(`
     SELECT * FROM cards
     ORDER BY RAND()
     LIMIT 10;
-    `, [zodiac, numerology]);
+    `);
+    console.log(cards)
 
     for (let i = 0; i < cards.length; i++) {
         let loopResult = [];
@@ -41,8 +41,7 @@ export async function getCardsByZodiacNumerologyTopic(zodiac, numerology, topic)
             });
 
         }
-        result = [
-            ...result,
+        result.push(
             {
                 card_id: card.id,
                 name: card.name,
@@ -51,8 +50,10 @@ export async function getCardsByZodiacNumerologyTopic(zodiac, numerology, topic)
                 image: card.image,
                 category: topic,
                 [topic]: loopResult
-            }]
+            }
+        )
 
     }
+    console.log("result is ",result)
     return result;
 }

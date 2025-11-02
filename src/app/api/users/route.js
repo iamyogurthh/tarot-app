@@ -1,4 +1,4 @@
-import { getCardsByZodiacNumerologyTopic } from '@/model/card'
+import { getCards } from '@/model/card'
 import { getCategoryIDByCategoryName } from '@/model/category';
 import { createReading } from '@/model/reading';
 import { getDataFromForm, getNumerology } from '@/utils/utils'
@@ -14,6 +14,7 @@ export async function POST(req) {
             'dob',
             'major'
         )
+        
   
   let zodiac = getZodiacSign(dob)
   let numerology = getNumerology(dob)
@@ -31,6 +32,6 @@ export async function POST(req) {
   if (!readingId) {
     return Response.json({ message: 'User cannot be created and cannot be read' })
   }
-  const cards = await getCardsByZodiacNumerologyTopic(zodiac, numerology, topic,readingId)
+  const cards = await getCards(topic)
   return Response.json({user_reading_id : readingId , cards});
 }
