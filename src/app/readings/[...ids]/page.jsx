@@ -1,121 +1,154 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
+import { use } from 'react'
 import { useTarot } from '@/context/TarotContext'
 import { useForm } from '@/context/FormContext'
 import Image from 'next/image'
-import MainMenuBtn from '@/components/MainMenuBtn'
 import { useRouter } from 'next/navigation'
+import { formatBirthDate, formatDateTime } from '@/utils/utils'
+import BackBt from '@/components/BackBt'
+import FullScreenLoader from '@/components/FullScreenLoader'
 
-const Readings = () => {
+const Readings = ({ params }) => {
+  const resolvedParams = React.use(params)
+  const [user_id, reading_id] = resolvedParams.ids
+
+  const [userData, setUserData] = useState(null)
+  const [cardList, setCardList] = useState([])
+  const [error, setError] = useState(null)
+  const [currentIndex, setCurrentIndex] = useState(0)
+
   const { userSelectedTarotData } = useTarot()
-  const { formData } = useForm()
-  const [cardIndex, setCardIndex] = useState(0) // Which card we are on
-  const [questionIndex, setQuestionIndex] = useState(0) // Which question within the card
   const router = useRouter()
 
-  // Redirect if missing data
-  useEffect(() => {
-    if (
-      !formData?.user_name ||
-      !formData?.full_name ||
-      !formData?.dob ||
-      !userSelectedTarotData ||
-      userSelectedTarotData.length === 0
-    ) {
-      router.push('/')
+  console.log(cardList)
+  //  Fetch API data
+  async function fetchDataById(user_Id, reading_Id) {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/readings/${user_Id}/${reading_Id}`
+      )
+      if (!res.ok) throw new Error('Failed to fetch reading data')
+      const data = await res.json()
+
+      //  Assume API returns [userData, ...cards]
+      const [userInfo, ...cards] = data
+      setUserData(userInfo)
+      setCardList(cards)
+    } catch (error) {
+      console.error(error)
+      setError(error.message)
     }
-  }, [formData, userSelectedTarotData, router])
+  }
 
-  const card = userSelectedTarotData[cardIndex]
-  const topic = formData.topic
-  const topicQuestions = card?.[topic] || []
-  const currentQuestion = topicQuestions[questionIndex] || {}
+  useEffect(() => {
+    if (user_id && reading_id) {
+      fetchDataById(user_id, reading_id)
+    }
+  }, [user_id, reading_id])
 
-  // Navigation handlers
+  //  Loading and error states
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-lg font-semibold text-red-600">
+        Error: {error}
+      </div>
+    )
+  }
+
+  if (!userData) {
+    return <FullScreenLoader />
+  }
+
+  //  Card navigation
   const handleNext = () => {
-    if (questionIndex < topicQuestions.length - 1) {
-      setQuestionIndex(questionIndex + 1)
-    } else if (cardIndex < userSelectedTarotData.length - 1) {
-      setCardIndex(cardIndex + 1)
-      setQuestionIndex(0)
+    if (currentIndex < cardList.length - 1) {
+      setCurrentIndex(currentIndex + 1)
     }
   }
 
   const handlePrev = () => {
-    if (questionIndex > 0) {
-      setQuestionIndex(questionIndex - 1)
-    } else if (cardIndex > 0) {
-      const prevCardQuestions =
-        userSelectedTarotData[cardIndex - 1]?.[topic] || []
-      setCardIndex(cardIndex - 1)
-      setQuestionIndex(prevCardQuestions.length - 1)
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1)
     }
   }
 
+  const card = cardList[currentIndex]
+  const topic = userData.topic || 'love'
+  const currentQuestion = card?.[topic] || {}
+
+  console.log(cardList)
+
   return (
     <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
-      <MainMenuBtn />
+      {/* Back Button */}
+      <div className="absolute top-4 left-4">
+        <BackBt />
+      </div>
 
       {/* User Info Section */}
       <div className="flex pt-[16px] items-center justify-start flex-wrap gap-4">
+        {/* Zodiac */}
         <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[48px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <p className="mb-[8px]">Your Zodiac Sign</p>
           <Image
-            src={`/zodiac_images/${formData.zodiac}.svg`}
+            src={`/zodiac_images/${userData.zodiac}.svg`}
             height={64}
             width={64}
             alt={'Zodiac'}
           />
         </div>
 
+        {/* Numerology */}
         <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[32px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <p>Your Numerology Value</p>
-          <p className="font-bold text-[60px] text-[#9798F5]">5</p>
+          <p className="font-bold text-[60px] text-[#9798F5]">
+            {userData.numerology}
+          </p>
         </div>
 
-        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[32px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
+        {/* Account Info */}
+        <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[16px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <table>
             <tbody className="text-left">
               <tr>
-                <td className="pr-[8px] pb-[8px]">User name:</td>
-                <td className="pb-[8px]">{formData.user_name}</td>
+                <td className="pr-[8px] pb-[8px]">Account name:</td>
+                <td className="pb-[8px]">{userData.user_name}</td>
               </tr>
               <tr>
                 <td className="pr-[8px] pb-[8px]">Full name:</td>
-                <td className="pb-[8px]">{formData.full_name}</td>
+                <td className="pb-[8px]">{userData.real_name}</td>
               </tr>
               <tr>
                 <td className="pr-[8px] pb-[8px]">Birthday:</td>
-                <td className="pb-[8px]">{formData.dob}</td>
+                <td className="pb-[8px]">{formatBirthDate(userData.dob)}</td>
               </tr>
               <tr>
                 <td className="pr-[8px] pb-[8px]">Major:</td>
-                <td className="pb-[8px]">{formData.major}</td>
+                <td className="pb-[8px]">{userData.major}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
+        {/* Reading Info */}
         <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[16px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <table>
             <tbody className="text-left">
               <tr>
                 <td className="pr-[8px] pb-[8px]">Read at:</td>
-                <td className="pb-[8px]">
-                  {new Date().toLocaleString('en-GB')}
-                </td>
+                <td className="pb-[8px]">{formatDateTime(userData.read_at)}</td>
               </tr>
               <tr>
                 <td className="pr-[8px] pb-[8px]">Category:</td>
-                <td className="pb-[8px]">{formData.topic}</td>
+                <td className="pb-[8px]">{userData.topic}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Card Reading */}
+      {/* Tarot Card Reading Section */}
       {card && (
         <div className="flex-grow mt-[16px] mb-6 bg-[#ffffff3f] rounded-[16px] border-2 border-[#9798F5] p-5 sm:p-8 md:p-10 shadow-xl relative flex flex-col justify-between">
           {/* Title */}
@@ -138,7 +171,7 @@ const Readings = () => {
               <h2 className="text-[24px] font-bold mt-4">{card.name}</h2>
             </div>
 
-            {/* Meaning Section */}
+            {/* Meaning */}
             <div className="flex-1 text-center md:text-left space-y-4">
               <h3 className="text-base sm:text-[24px] font-semibold text-black leading-relaxed">
                 {currentQuestion?.question_text || 'မေးခွန်းမရှိပါ။'}
@@ -149,10 +182,10 @@ const Readings = () => {
             </div>
           </div>
 
-          {/* Navigation Arrows */}
+          {/* Navigation Buttons */}
           <button
             onClick={handlePrev}
-            disabled={cardIndex === 0 && questionIndex === 0}
+            disabled={currentIndex === 0}
             className="cursor-pointer absolute top-1/2 left-3 sm:left-4 transform -translate-y-1/2 hover:scale-110 transition disabled:opacity-30"
           >
             <Image
@@ -165,10 +198,7 @@ const Readings = () => {
 
           <button
             onClick={handleNext}
-            disabled={
-              cardIndex === userSelectedTarotData.length - 1 &&
-              questionIndex === topicQuestions.length - 1
-            }
+            disabled={currentIndex === cardList.length - 1}
             className="cursor-pointer absolute top-1/2 right-3 sm:right-4 transform -translate-y-1/2 hover:scale-110 transition disabled:opacity-30"
           >
             <Image
@@ -179,13 +209,13 @@ const Readings = () => {
             />
           </button>
 
-          {/* Pagination Dots */}
+          {/* Pagination */}
           <div className="flex justify-center mt-4 gap-2">
-            {topicQuestions.map((_, i) => (
+            {cardList.map((_, i) => (
               <span
                 key={i}
                 className={`w-6 h-2 rounded-full transition-all duration-300 ${
-                  i === questionIndex ? 'bg-[#8854d0]' : 'bg-gray-300'
+                  i === currentIndex ? 'bg-[#8854d0]' : 'bg-gray-300'
                 }`}
               ></span>
             ))}

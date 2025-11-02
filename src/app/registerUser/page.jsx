@@ -1,4 +1,3 @@
-import UserInputForm from '@/components/UserInputForm'
 import UserRegisterForm from '@/components/UserRegisterForm'
 import Image from 'next/image'
 import Link from 'next/link'

@@ -48,14 +48,16 @@ const Page = () => {
         setIsSubmitting(false)
         throw new Error('Failed to create user')
       } else {
-        setIsSubmitting(false)
         const data = await res.json()
         console.log('Return from server 10 cards: ' + data)
         setTarotsForSelection(data)
+
         router.push('/cardSelection')
       }
     } catch (error) {
       console.log('Error: ' + error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
