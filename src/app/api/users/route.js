@@ -1,8 +1,15 @@
 import { getCards } from '@/model/card'
 import { getCategoryIDByCategoryName } from '@/model/category';
 import { createReading } from '@/model/reading';
+import { getAllUsers } from '@/model/user';
 import { getDataFromForm, getNumerology } from '@/utils/utils'
 import { getZodiacSign } from '@/utils/utils'
+
+export async function GET(req, res) {
+  const users = await getAllUsers();
+  return Response.json(users);
+}
+
 export async function POST(req) {
     const formData = await req.formData();
         console.log(formData)

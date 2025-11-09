@@ -15,6 +15,40 @@ export async function getCardById(id) {
     return card[0];
 }
 
+export async function createCard(name,zodiac,numerology,image){
+    const isOk = await pool.query(`
+    insert into cards (name,zodiac,numerology,image) values (?,?,?,?)
+    `,[name,zodiac,numerology,image]);
+    if(isOk){
+        return true;
+    }
+    return false;
+
+}
+
+export async function editCard(id, name, zodiac, numerology, image) {
+    const [result] = await pool.query(
+        `UPDATE cards 
+         SET name = ?, zodiac = ?, numerology = ?, image = ? 
+         WHERE id = ?`,
+        [name, zodiac, numerology, image, id]
+    );
+
+    return result.affectedRows > 0 ;
+}
+
+export async function deleteCard(id) {
+    const [result] = await pool.query(
+        `DELETE FROM cards WHERE id = ?`,
+        [id]
+    );
+    return result.affectedRows > 0;
+}
+
+
+
+
+
 export async function getCards(topic) {
     let result = []
     const categoryId = await getCategoryIDByCategoryName(topic);
@@ -54,6 +88,5 @@ export async function getCards(topic) {
         )
 
     }
-    console.log("result is ",result)
     return result;
 }

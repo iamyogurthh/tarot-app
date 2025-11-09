@@ -1,8 +1,154 @@
+        For the creations of cards , You must first create card or category first.
+Then go on to the question creation and last go to the meaning.
+Category -> Card -> Question -> Meaning
+Card -> Catgeogry -> Question -> Meaning
+
+        To create Card
+POST - http://localhost:3000/api/cards
+Form Data - name ,zodiac ,numerology ,image
+Response - { message : Successfully created}
+
+
+        To create category
+POST - http://localhost:3000/api/categories
+Form Data - name 
+Response - { message : Successfully created}
+
+        To create question
+POST - http://localhost:3000/api/questions
+Form Data - category_id ,question_no, question_text
+Response - { message : Successfully created}
+
+        To create meaning
+POST - http://localhost:3000/api/meanings
+Form Data - card_id, question_id ,category_id ,question_answer
+Response - { message : Successfully created}
+
         To register a User
 POST - http://localhost:3000/api/register
 Form Data - user_name, real_name, dob
-Response - Registered successfully
+Response - {message : Registered successfully}
 
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+                                Getting a list of something
+
+
+        To get a list of users
+GET - http://localhost:3000/api/users
+Response - [
+    {
+        "id": 1,
+        "name": "alex",
+        "real_name": "alexjohn",
+        "dob": "2022-02-01T17:30:00.000Z"
+    },
+    {
+        "id": 2,
+        "name": "emma",
+        "real_name": "emmasmith",
+        "dob": "2022-02-01T17:30:00.000Z"
+    },
+    ...
+]
+
+        To get a list of categories
+GET - http://localhost:3000/api/categories
+Response - [
+    {
+        "id": 1,
+        "name": "general"
+    },
+    {
+        "id": 2,
+        "name": "love"
+    },
+    ...
+]
+
+
+        To get a list of cards
+GET - http://localhost:3000/api/cards
+Response - [
+    {
+        "id": 1,
+        "name": "The Fool",
+        "zodiac": "Uranus",
+        "numerology": "0",
+        "image": "fool.jpg"
+    },
+    {
+        "id": 2,
+        "name": "The Magician",
+        "zodiac": "Mercury",
+        "numerology": "1",
+        "image": "magician.jpg"
+    },
+    ....
+]
+
+
+        To get a list of questions
+GET - http://localhost:3000/api/questions
+Response - [
+    {
+        "id": 1,
+        "category_id": 1,
+        "question_no": 1,
+        "question_text": "သင့်ကိုယ်သင် ဘယ်လိုခံစားနေရလဲ။"
+    },
+    {
+        "id": 2,
+        "category_id": 1,
+        "question_no": 2,
+        "question_text": "အခုအချိန်မှာ သင်ဘာကို အလိုချင်ဆုံးလဲ။"
+    },
+    ...
+]
+
+
+        To get a list of questions related to the category
+GET - http://localhost:3000/api/admin/questions/[category_id]
+Response - [
+    {
+        "id":1,
+        "category_id":1,
+        "question_no":1,
+        "question_text":"သင့်ကိုယ်သင် ဘယ်လိုခံစားနေရလဲ။"
+    },
+    {
+        "id":2,
+        "category_id":1,
+        "question_no":2,
+        "question_text":"သင့်ကိုယ်သင် ဘယ်လိုခံစားနေရလဲ။"
+    },
+    ....
+]
+
+
+        To get a list of meanings
+GET - http://localhost:3000/api/meanings
+Response - [
+    {
+        "id": 1,
+        "card_id": 1,
+        "question_id": 1,
+        "category_id": 1,
+        "question_answer": "အခုအချိန်မှာ သင်ဟာ စိတ်လွတ်လပ်စွာနဲ့ ဘာမှမစဉ်းစားချင်တဲ့အခြေအနေမှာ ရှိနေတာပါ။ အနာဂတ်ကိုစိုးရိမ်မနေဘဲ ရှိသမျှအခွင့်အလမ်းတွေကို စမ်းသပ်ချင်နေပါတယ်။"
+    },
+    {
+        "id": 2,
+        "card_id": 1,
+        "question_id": 2,
+        "category_id": 1,
+        "question_answer": "သင့်အတွင်းမှာ တစ်ခုခုအသစ်စပြုဖို့ စိတ်ကူးယဉ်နေတာတွေ့ရပါတယ်။ ခရီးသစ်တစ်ခု၊ အတွေ့အကြုံအသစ်တစ်ခု စတင်ချင်နေပါတယ်။"
+    },
+    ...
+]
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+                                    Getting specific detail
 
         To login a User
 POST - http://localhost:3000/api/login
@@ -10,6 +156,112 @@ Form Data - user_name
 Response - {
     "user_id": 4
 }
+
+        To get a specific user
+GET - http://localhost:3000/api/users/[user_id]
+Respose - {
+    "id": 1,
+    "name": "alex",
+    "real_name": "alexjohn",
+    "dob": "2022-02-01T17:30:00.000Z"
+}
+
+        To get a specific card
+GET - http://localhost:3000/api/cards/[card_id]
+Response - {
+    "id": 1,
+    "name": "The Fool",
+    "zodiac": "Uranus",
+    "numerology": "0",
+    "image": "fool.jpg"
+}
+
+        To get a specific category
+GET - http://localhost:3000/api/categories/[category_id]
+Response - {
+    "id": 1,
+    "name": "general"
+}
+
+        To get a specific question
+GET - http://localhost:3000/api/questions/[question_id]
+Response - {
+    "id": 1,
+    "category_id": 1,
+    "question_no": 1,
+    "question_text": "သင့်ကိုယ်သင် ဘယ်လိုခံစားနေရလဲ။"
+}
+
+
+        To get a specific meaning
+GET - http://localhost:3000/api/meanings/[meaning_id]
+Response - {
+    "id": 1,
+    "card_id": 1,
+    "question_id": 1,
+    "category_id": 1,
+    "question_answer": "အခုအချိန်မှာ သင်ဟာ စိတ်လွတ်လပ်စွာနဲ့ ဘာမှမစဉ်းစားချင်တဲ့အခြေအနေမှာ ရှိနေတာပါ။ အနာဂတ်ကိုစိုးရိမ်မနေဘဲ ရှိသမျှအခွင့်အလမ်းတွေကို စမ်းသပ်ချင်နေပါတယ်။"
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                    Updating
+
+
+        To update Card
+PUT - http://localhost:3000/api/cards/[card_id]
+Form Data - name, zodiac, numerology, image
+Response - { message: "Successfully updated" }
+
+
+        To update Category
+PUT - http://localhost:3000/api/categories/[category_id]
+Form Data - name
+Response - { message: "Successfully updated" }
+
+
+        To update Question
+PUT - http://localhost:3000/api/questions/[question_id]
+Form Data - category_id, question_no, question_text
+Response - { message: "Successfully updated" }
+
+
+        To update Meaning
+PUT - http://localhost:3000/api/meanings/[meaning_id]
+Form Data - card_id, question_id, category_id, question_answer
+Response - { message: "Successfully updated" }
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                    Deleting
+
+
+        To delete Card
+DELETE - http://localhost:3000/api/cards/[card_id]
+Response - { message: "Successfully deleted" }
+
+
+        To delete Category
+DELETE - http://localhost:3000/api/categories/[category_id]
+Response - { message: "Successfully deleted" }
+
+
+         To delete Question
+DELETE - http://localhost:3000/api/questions/[question_id]
+Response - { message: "Successfully deleted" }
+
+
+       To delete Meaning
+DELETE - http://localhost:3000/api/meanings/[meaning_id]
+Response - { message: "Successfully deleted" }
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -140,6 +392,10 @@ Response - {
 
 
 
+----------------------------------------------------------------------------------------------
+
+
+
         For Admin to get a list of users
 Get - http://localhost:3000/api/admin
 Response - [
@@ -166,6 +422,7 @@ Response - [
         "reading_id": 2,
         "user_name": "alex",
         "full_name": "phyolay",
+        "reading_user_dob" : "2025-10-29T05:17:25.000Z",
         "topic": "business",
         "read_at": "2025-10-29T05:17:25.000Z"
     },

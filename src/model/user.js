@@ -1,5 +1,13 @@
 import pool from '@/database/db'
 
+export async function getAllUsers() {
+  const [users] = await pool.query(
+    `
+    select * from users
+    `)
+  return users;
+}
+
 export async function createUser(user_name, full_name, dob) {
   const [result] = await pool.query(
     `

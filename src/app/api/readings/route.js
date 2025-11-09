@@ -1,15 +1,31 @@
-import { getCategoryIDByCategoryName } from "@/model/category";
+import { getCategoryByCategoryId, getCategoryIDByCategoryName } from "@/model/category";
 import { getReadingById, insertCards } from "@/model/reading";
+import { getUserById } from "@/model/user";
 
 export async function POST(req, res) {
     const data = await req.json();
     let result = [];
 
     const reading = await getReadingById(data.user_reading_id);
+    const user = await getUserById(reading.user_id);
+    const category = await getCategoryByCategoryId(reading.category_id);
+    
+    const finalUser = {
+        user_name : user.name,
+        full_name : reading.real_name,
+        dob : reading.dob,
+        major : reading.major,
+        read_at : reading.read_at,
+        category,
+        zodiac : reading.zodiac,
+        numerology : reading.numerology 
+    }
 
     if(!reading){
         return Response.json({message : "Reading with this id doesn't exist"},{status : 400});
     }
+
+
 
     for (let i = 0; i < data[data.topic].length; i++) {
         result.push({
@@ -26,6 +42,9 @@ export async function POST(req, res) {
             result[i].question_id,
             result[i].meaning_id)
     }
-    return Response.json({message : "Successfully added"});
+
+    
+
+    return Response.json(finalUser);
 }
 

@@ -11,8 +11,8 @@ export async function GET(req, { params }) {
         let category = await getCategoryByCategoryId(overviews[i].category_id);
         result.push({
             reading_id : overviews[i].id,
-            user_name : user.name,
             full_name : overviews[i].real_name,
+            reading_user_dob : overviews[i].dob,
             topic : category,
             read_at : overviews[i].read_at
         })
