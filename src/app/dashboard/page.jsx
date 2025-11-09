@@ -4,7 +4,7 @@ import SearchBox from '@/components/SearchBox'
 import Link from 'next/link'
 import Image from 'next/image'
 import React from 'react'
-import { formatBirthDate } from '@/utils/utils'
+import { formatBirthDate } from '@/utils/utils.client'
 
 const Page = async () => {
   let data = []

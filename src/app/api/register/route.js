@@ -1,5 +1,5 @@
 import { createUser, getUserByUserName } from '@/model/user'
-import { getDataFromForm } from '@/utils/utils'
+import { getDataFromForm } from '@/utils/utils.server'
 import { NextResponse } from 'next/server'
 
 export async function POST(req) {

@@ -1,7 +1,7 @@
         For the creations of cards , You must first create card or category first.
 Then go on to the question creation and last go to the meaning.
 Category -> Card -> Question -> Meaning
-Card -> Catgeogry -> Question -> Meaning
+Card -> Category -> Question -> Meaning
 
         To create Card
 POST - http://localhost:3000/api/cards
@@ -159,7 +159,7 @@ Response - {
 
         To get a specific user
 GET - http://localhost:3000/api/users/[user_id]
-Respose - {
+Response - {
     "id": 1,
     "name": "alex",
     "real_name": "alexjohn",
@@ -209,7 +209,7 @@ Response - {
 
 
         To update Card
-PUT - http://localhost:3000/api/cards/[card_id]
+PUT - http://localhost:3000/api/cards/[card_id] 
 Form Data - name, zodiac, numerology, image
 Response - { message: "Successfully updated" }
 

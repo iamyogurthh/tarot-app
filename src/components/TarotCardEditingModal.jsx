@@ -22,9 +22,7 @@ const TarotCardEditingModal = ({ setIsModalOpen, category, editingAnswer }) => {
           <span className="text-black font-semibold">{category} </span>
         </p>
         <div className="mb-[8px]">
-          <span className="font-bold mr-2">
-            Question {editingAnswer.key.split('q')}:
-          </span>
+          <span className="font-bold mr-2">Question:</span>
           <span>{editingAnswer.question}</span>
         </div>
 

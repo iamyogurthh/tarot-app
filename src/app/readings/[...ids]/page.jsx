@@ -5,7 +5,7 @@ import { useTarot } from '@/context/TarotContext'
 import { useForm } from '@/context/FormContext'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { formatBirthDate, formatDateTime } from '@/utils/utils'
+import { formatBirthDate, formatDateTime } from '@/utils/utils.client'
 import BackBt from '@/components/BackBt'
 import FullScreenLoader from '@/components/FullScreenLoader'
 
@@ -18,30 +18,26 @@ const Readings = ({ params }) => {
   const [error, setError] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const { userSelectedTarotData } = useTarot()
-  const router = useRouter()
-
-  console.log(cardList)
-  //  Fetch API data
-  async function fetchDataById(user_Id, reading_Id) {
-    try {
-      const res = await fetch(
-        `http://localhost:3000/api/readings/${user_Id}/${reading_Id}`
-      )
-      if (!res.ok) throw new Error('Failed to fetch reading data')
-      const data = await res.json()
-
-      //  Assume API returns [userData, ...cards]
-      const [userInfo, ...cards] = data
-      setUserData(userInfo)
-      setCardList(cards)
-    } catch (error) {
-      console.error(error)
-      setError(error.message)
-    }
-  }
-
   useEffect(() => {
+    //  Fetch API data
+    async function fetchDataById(user_Id, reading_Id) {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/readings/${user_Id}/${reading_Id}`
+        )
+        if (!res.ok) throw new Error('Failed to fetch reading data')
+        const data = await res.json()
+
+        //  Assume API returns [userData, ...cards]
+        const [userInfo, ...cards] = data
+        setUserData(userInfo)
+        setCardList(cards)
+      } catch (error) {
+        console.error(error)
+        setError(error.message)
+      }
+    }
+
     if (user_id && reading_id) {
       fetchDataById(user_id, reading_id)
     }
@@ -76,8 +72,6 @@ const Readings = ({ params }) => {
   const card = cardList[currentIndex]
   const topic = userData.topic || 'love'
   const currentQuestion = card?.[topic] || {}
-
-  console.log(cardList)
 
   return (
     <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">

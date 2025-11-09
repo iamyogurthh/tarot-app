@@ -2,7 +2,7 @@ import React from 'react'
 
 const Banner3 = ({ rows }) => {
   return (
-    <div className=" bg-white border-2 border-[#CBCCFA] rounded-[16px] px-[16px]  py-[8px] shadow-lg w-[242px] flex flex-col justify-center items-center">
+    <div className="w-auto bg-white border-2 border-[#CBCCFA] rounded-[16px] px-[16px]  py-[8px] shadow-lg flex flex-col justify-center items-center">
       <table className="w-full">
         <tbody>
           {rows.map((item, index) => (

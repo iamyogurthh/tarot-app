@@ -37,13 +37,22 @@ const sidebarElements = [
 const DashboardSideBarItem = () => {
   const pathname = usePathname()
 
+  // Find the longest matching path to determine the active item
+  const activeItem = sidebarElements.reduce((longest, item) => {
+    if (pathname === item.path || pathname.startsWith(`${item.path}/`)) {
+      return !longest || item.path.length > longest.path.length ? item : longest
+    }
+    return longest
+  }, null)
+
   return (
     <>
-      {sidebarElements.map((item, index) => {
-        const isActive = pathname === item.path
+      {sidebarElements.map((item) => {
+        const isActive = activeItem?.key === item.key
+
         return (
           <Link
-            key={index}
+            key={item.key}
             href={item.path}
             className={`rounded-[8px] px-4 py-2 flex items-center mb-[16px] ${
               isActive ? 'active' : 'hover:bg-[#9799f535]'

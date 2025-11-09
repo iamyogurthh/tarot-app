@@ -5,26 +5,33 @@ import ReuseableTable from '@/components/ReuseableTable'
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { formatDateTime } from '@/utils/utils'
+import { formatBirthDate, formatDateTime } from '@/utils/utils.client'
 
 const page = async ({ params }) => {
   const { userId } = await params
 
-  const rowsElements = [
-    { label: 'User Name:', value: '' },
-    { label: 'Full Name:', value: '' },
-    { label: 'Birthday:', value: '' },
-  ]
-
   let data = []
+  let userData = {}
   try {
-    const res = await fetch(`http://localhost:3000/api/readings/${userId}`, {
-      cache: 'no-store', // ensure fresh data
-    })
-    data = await res.json()
+    const [res1, res2] = await Promise.all([
+      fetch(`http://localhost:3000/api/readings/${userId}`, {
+        cache: 'no-store', // ensure fresh data
+      }),
+      fetch(` http://localhost:3000/api/users/${userId}`),
+    ])
+    data = await res1.json()
+    userData = await res2.json()
   } catch (error) {
     console.error('Error fetching readings:', error)
   }
+
+  const rowsElements = [
+    { label: 'User Name:', value: userData.name },
+    { label: 'Full Name:', value: userData.real_name },
+    { label: 'Birthday:', value: formatBirthDate(userData.dob) },
+  ]
+
+  console.log(data)
 
   const columns = [
     {
@@ -34,6 +41,15 @@ const page = async ({ params }) => {
     {
       label: 'Full Name',
       field: 'full_name',
+    },
+    {
+      label: 'Date of Birth',
+      field: 'reading_user_dob',
+      render: (row) => formatBirthDate(row.reading_user_dob),
+    },
+    {
+      label: 'Major',
+      field: 'major',
     },
     {
       label: 'Topic',

@@ -1,151 +1,309 @@
 'use client'
+
 import Banner from '@/components/Banner'
-import React, { useState, useEffect } from 'react'
-import { questionData } from '@/data/questionData'
+import React, { useState, useEffect, Suspense } from 'react'
 import ReuseableTable from '@/components/ReuseableTable'
 import Image from 'next/image'
 import EditQuestionModal from '@/components/EditQuestionModal'
 import AddNewCategoryModal from '@/components/AddNewCategoryModal'
+import AddNewQuestionModal from '@/components/AddNewQuestionModal'
+import EditCategoryModal from '@/components/EditCategoryModal' // ✅ new
 
-const page = () => {
-  const [category, setCategory] = useState('love')
-  const data = [questionData.find((q) => q.key == category)]
+const Page = () => {
+  const [categories, setCategories] = useState([])
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+  const [questions, setQuestions] = useState([])
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false)
+  const [isEditCategoryOpen, setIsEditCategoryOpen] = useState(false) // ✅ edit category
   const [editingQuestion, setEditingQuestion] = useState({
-    key: '',
-    question: '',
-    answer: '',
+    id: '',
+    question_no: '',
+    question_text: '',
   })
+  const [editingCategoryId, setEditingCategoryId] = useState(null)
 
+  //Fetch all categories once
   useEffect(() => {
-    if (isEditModalOpen || isAddModalOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
+    async function fetchCategories() {
+      try {
+        const res = await fetch('http://localhost:3000/api/categories')
+        if (!res.ok) throw new Error('Failed to fetch categories')
+        const data = await res.json()
+        setCategories(data)
+        if (data.length > 0) setSelectedCategoryId(data[0].id)
+      } catch (err) {
+        console.error(err)
+      }
     }
-  }, [isEditModalOpen, isAddModalOpen])
+    fetchCategories()
+  }, [])
 
+  //Fetch questions when category changes
+  useEffect(() => {
+    async function fetchQuestions() {
+      if (!selectedCategoryId) return
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/admin/questions/${selectedCategoryId}`
+        )
+        if (!res.ok) throw new Error('Failed to fetch questions')
+        const data = await res.json()
+        setQuestions(data)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    fetchQuestions()
+  }, [selectedCategoryId])
+
+  //Prevent background scroll when any modal is open
+  useEffect(() => {
+    document.body.style.overflow =
+      isEditModalOpen ||
+      isAddModalOpen ||
+      isAddQuestionModalOpen ||
+      isEditCategoryOpen
+        ? 'hidden'
+        : 'auto'
+  }, [
+    isEditModalOpen,
+    isAddModalOpen,
+    isAddQuestionModalOpen,
+    isEditCategoryOpen,
+  ])
+
+  //Delete question
+  const handleDeleteQuestion = async (id) => {
+    if (!confirm('Are you sure you want to delete this question?')) return
+    try {
+      const res = await fetch(`http://localhost:3000/api/questions/${id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) throw new Error('Failed to delete question')
+      alert('Question deleted successfully')
+      setQuestions((prev) => prev.filter((q) => q.id !== id))
+    } catch (err) {
+      console.error(err)
+      alert('Error deleting question')
+    }
+  }
+
+  //Delete category
+  const handleDeleteCategory = async (id) => {
+    if (!confirm('Are you sure you want to delete this category?')) return
+    try {
+      const res = await fetch(`http://localhost:3000/api/categories/${id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) throw new Error('Failed to delete category')
+      alert('Category deleted successfully')
+      setCategories((prev) => prev.filter((c) => c.id !== id))
+      if (selectedCategoryId === id) setSelectedCategoryId(null)
+    } catch (err) {
+      console.error(err)
+      alert('Error deleting category')
+    }
+  }
+
+  //Columns for questions table
   const columns = [
     {
-      label: 'Category Name',
-      render: (data) => <div className="align-top">{data.label}</div>,
-    },
-    {
-      label: 'Questions',
-      render: (data) => (
-        <div>
-          {Object.entries(data.questions).map(([key, value]) => (
-            <div key={key} className="mb-8">
-              <span className="font-semibold">
-                Question {key.replace('q', '')}
-              </span>
-              <div className="my-2">{value}</div>
-              <div className="flex">
-                <button
-                  onClick={() => {
-                    setIsEditModalOpen(true)
-                    setEditingQuestion({
-                      key: key,
-                      question: value, // ✅ use value (the text)
-                      answer: '', // if you want to load existing answer, handle here
-                    })
-                  }}
-                  className="flex items-center underline cursor-pointer font-semibold mr-[24px]"
-                >
-                  <Image
-                    src={'/system_images/edit.png'}
-                    width={24}
-                    height={24}
-                    alt="edit"
-                    className="mr-[8px]"
-                  />
-                  Edit Question
-                </button>
-
-                <button className="flex items-center underline cursor-pointer font-semibold">
-                  <Image
-                    src={'/system_images/trash.png'}
-                    width={18}
-                    height={18}
-                    alt="delete"
-                    className="mr-[8px]"
-                  />
-                  Delete Question
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+      label: 'Question No',
+      render: (item) => (
+        <div className="font-semibold py-2">{item.question_no}</div>
       ),
     },
     {
-      label: 'Action',
-      field: 'id',
-      render: () => (
-        <div className="flex cursor-pointer">
-          <Image
-            src={'/system_images/trash.png'}
-            alt="trash"
-            width={24}
-            height={27}
-            className="cursor-pointer"
-          />
-          <p className="ml-2 underline font-semibold">Delete Category</p>
+      label: 'Question Text',
+      render: (item) => (
+        <div className="whitespace-pre-line py-2">{item.question_text}</div>
+      ),
+    },
+    {
+      label: 'Actions',
+      render: (item) => (
+        <div className="flex gap-6 py-2">
+          <button
+            onClick={() => {
+              setEditingQuestion({
+                id: item.id,
+                question_no: item.question_no,
+                question_text: item.question_text,
+              })
+              setIsEditModalOpen(true)
+            }}
+            className="flex items-center underline font-semibold"
+          >
+            <Image
+              src="/system_images/edit.png"
+              width={20}
+              height={20}
+              alt="edit"
+              className="mr-2"
+            />
+            Edit
+          </button>
+
+          <button
+            onClick={() => handleDeleteQuestion(item.id)}
+            className="flex items-center underline font-semibold text-red-600"
+          >
+            <Image
+              src="/system_images/trash.png"
+              width={18}
+              height={18}
+              alt="delete"
+              className="mr-2"
+            />
+            Delete
+          </button>
         </div>
       ),
     },
   ]
 
   return (
-    <div className="p-2">
-      {isEditModalOpen && (
-        <EditQuestionModal
-          setIsEditModalOpen={setIsEditModalOpen}
-          category={category}
-          editingQuestion={editingQuestion}
-        />
-      )}
-      {isAddModalOpen && (
-        <AddNewCategoryModal setIsAddModalOpen={setIsAddModalOpen} />
-      )}
+    <Suspense fallback={<p>Loading...</p>}>
+      <div className="p-4">
+        {/* Modals */}
+        {isEditModalOpen && (
+          <EditQuestionModal
+            setIsEditModalOpen={setIsEditModalOpen}
+            editingQuestion={editingQuestion}
+            categoryId={selectedCategoryId}
+            onSuccess={() => {
+              fetch(
+                `http://localhost:3000/api/admin/questions/${selectedCategoryId}`
+              )
+                .then((res) => res.json())
+                .then((data) => setQuestions(data))
+            }}
+          />
+        )}
 
-      <div className="flex items-center justify-start gap-2">
-        <Banner
-          label={'Total Categories'}
-          img={'/system_images/categories.png'}
-          value={4}
-        />
-        <Banner
-          label={'Total Questions'}
-          img={'/system_images/question_circle-puple.png'}
-          value={32}
-        />
-      </div>
+        {isAddModalOpen && (
+          <AddNewCategoryModal
+            setIsAddModalOpen={setIsAddModalOpen}
+            onSuccess={() => {
+              fetch('http://localhost:3000/api/categories')
+                .then((res) => res.json())
+                .then((data) => setCategories(data))
+            }}
+          />
+        )}
 
-      <div className="flex items-center justify-end w-full mt-[8px] mb-[8px]">
-        <button onClick={() => setIsAddModalOpen(true)} className="primary_btn">
-          Add New Category
-        </button>
-      </div>
+        {isAddQuestionModalOpen && (
+          <AddNewQuestionModal
+            categoryId={selectedCategoryId}
+            setIsAddQuestionModalOpen={setIsAddQuestionModalOpen}
+            existingQuestions={questions}
+            onSuccess={() => {
+              fetch(
+                `http://localhost:3000/api/admin/questions/${selectedCategoryId}`
+              )
+                .then((res) => res.json())
+                .then((data) => setQuestions(data))
+            }}
+          />
+        )}
 
-      <div className="flex items-center justify-start my-[8px]">
-        {questionData.map((q) => (
+        {/* ✅ Edit Category Modal */}
+        {isEditCategoryOpen && editingCategoryId && (
+          <EditCategoryModal
+            setIsEditCategoryOpen={setIsEditCategoryOpen}
+            categoryId={editingCategoryId}
+            onSuccess={() => {
+              fetch('http://localhost:3000/api/categories')
+                .then((res) => res.json())
+                .then((data) => setCategories(data))
+            }}
+          />
+        )}
+
+        {/* Dashboard Banners */}
+        <div className="flex flex-wrap items-center gap-4 mb-6">
+          <Banner
+            label="Total Categories"
+            img="/system_images/categories.png"
+            value={categories.length}
+          />
+          <Banner
+            label="Total Questions"
+            img="/system_images/question_circle-puple.png"
+            value={questions.length}
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-end mb-4">
           <button
-            key={q.key}
-            className={`bg-white mr-[16px] border-2 border-[#9798F5] px-[24px] py-[8px] rounded-2xl shadow-2xl cursor-pointer ${
-              category === q.key ? 'active_btn' : ''
-            }`}
-            onClick={() => setCategory(q.key)}
+            onClick={() => setIsAddModalOpen(true)}
+            className="primary_btn"
           >
-            {q.label}
+            Add New Category
           </button>
-        ))}
-      </div>
+        </div>
 
-      <ReuseableTable columns={columns} data={data} rowKey={'id'} />
-    </div>
+        {/* Category Selector */}
+        <div className="flex flex-wrap gap-3 mb-6">
+          {categories.map((c) => (
+            <div
+              key={c.id}
+              className="flex flex-col justify-center items-center gap-2"
+            >
+              <button
+                onClick={() => setSelectedCategoryId(c.id)}
+                className={`border-2 border-[#9798F5] px-6 py-2 rounded-2xl shadow-md ${
+                  selectedCategoryId === c.id ? 'active_btn' : 'bg-white'
+                }`}
+              >
+                {c.name}
+              </button>
+              <div className="flex gap-4 ">
+                {/* Edit category button */}
+                <Image
+                  src="/system_images/edit.png"
+                  width={20}
+                  height={20}
+                  alt="edit category"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setEditingCategoryId(c.id)
+                    setIsEditCategoryOpen(true)
+                  }}
+                />
+                {/* Delete category */}
+                <Image
+                  src="/system_images/trash.png"
+                  width={20}
+                  height={20}
+                  alt="delete category"
+                  className="cursor-pointer"
+                  onClick={() => handleDeleteCategory(c.id)}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {selectedCategoryId && (
+          <div className="flex justify-end">
+            <button
+              onClick={() => setIsAddQuestionModalOpen(true)}
+              className="primary_btn bg-green-600 hover:bg-green-700 mb-4"
+            >
+              + Add New Question
+            </button>
+          </div>
+        )}
+
+        {/* Questions Table */}
+        <ReuseableTable columns={columns} data={questions} rowKey="id" />
+      </div>
+    </Suspense>
   )
 }
 
-export default page
+export default Page

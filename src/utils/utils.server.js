@@ -1,7 +1,6 @@
-import path from 'path';
-import { writeFile } from 'fs/promises';
-import fs from 'fs/promises';
-
+import path from 'path'
+import { writeFile } from 'fs/promises'
+import fs from 'fs/promises'
 
 export function getDataFromForm(formData, ...args) {
   let data = {}
@@ -12,38 +11,39 @@ export function getDataFromForm(formData, ...args) {
 }
 
 export async function handleImage(img) {
-  const buffer = Buffer.from(await img.arrayBuffer());
-  const filename = Date.now() + img.name.replaceAll(" ", "_");
-  await writeFile(path.join(process.cwd(), `/public/tarot_images/` + filename), buffer);
-  return filename;
+  const buffer = Buffer.from(await img.arrayBuffer())
+  const filename = Date.now() + img.name.replaceAll(' ', '_')
+  await writeFile(
+    path.join(process.cwd(), `/public/tarot_images/` + filename),
+    buffer
+  )
+  return filename
 }
 
 export async function deleteImage(filename) {
-  if (!filename) return;
-  const filepath = path.join(process.cwd(), `/public/tarot_images/${filename}`);
+  if (!filename) return
+  const filepath = path.join(process.cwd(), `/public/tarot_images/${filename}`)
   try {
-    await fs.unlink(filepath);
-    console.log("File deleted successfully:", filename);
+    await fs.unlink(filepath)
+    console.log('File deleted successfully:', filename)
   } catch (error) {
-    if (error.code !== "ENOENT") {
-      console.error("Error deleting file:", error);
+    if (error.code !== 'ENOENT') {
+      console.error('Error deleting file:', error)
     } else {
-      console.warn("File not found, nothing to delete:", filename);
+      console.warn('File not found, nothing to delete:', filename)
     }
   }
 }
 
 export async function handleImageEdit(img, object) {
-      if (typeof img === 'string') {
-          img = img;
-      } else if (img && img.name !== '') {
-              await deleteImage(object.image);
-              img = await handleImage(img);
-      }
-      return img;
-
+  if (typeof img === 'string') {
+    img = img
+  } else if (img && img.name !== '') {
+    await deleteImage(object.image)
+    img = await handleImage(img)
+  }
+  return img
 }
-
 
 export function getZodiacSign(dateString) {
   const date = new Date(dateString) // e.g., "2000-05-15"
@@ -81,28 +81,3 @@ export function getNumerology(dob) {
 
   return sum
 }
-
-export function formatDateTime(isoString) {
-  const date = new Date(isoString)
-  return date.toLocaleString('en-US', {
-    timeZone: 'UTC',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
-
-export const formatBirthDate = (isoString) => {
-  if (!isoString) return ''
-
-  const date = new Date(isoString)
-  return date.toLocaleDateString('en-GB', {
-    timeZone: 'UTC',
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-}
-

@@ -1,90 +1,154 @@
 'use client'
+
 import BackBt from '@/components/BackBt'
 import TarotCardEditingModal from '@/components/TarotCardEditingModal'
-import { questionData } from '@/data/questionData'
-import { tarotData } from '@/data/tarotData'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
 
 const Page = () => {
-  const params = useParams()
-  const { cardId } = params
-  const tarot = tarotData.find((item) => Number(item.id) === Number(cardId))
-  const [category, setCategory] = useState('love')
+  const { cardId } = useParams()
+  const [tarot, setTarot] = useState(null)
+  const [categoryList, setCategoryList] = useState([])
+  const [questionList, setQuestionList] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [category, setCategory] = useState(null)
   const [editingAnswer, setEditingAnswer] = useState({
     key: '',
+    question: '',
     answer: '',
   })
+  const [selectedCategory, setSelectedCategory] = useState(null)
 
+  // Fetch tarot card & category list once when cardId changes
   useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
+    async function fetchCard() {
+      try {
+        const [cardRes, categoryRes] = await Promise.all([
+          fetch(`http://localhost:3000/api/cards/${cardId}`),
+          fetch(`http://localhost:3000/api/categories`),
+        ])
+
+        if (!cardRes.ok) throw new Error('Failed to fetch card')
+        const cardData = await cardRes.json()
+        setTarot(cardData)
+
+        if (!categoryRes.ok) throw new Error('Failed to fetch categories')
+        const categoryData = await categoryRes.json()
+        setCategoryList(categoryData)
+
+        // Default select the first category (if exists)
+        if (categoryData.length > 0) {
+          setCategory(categoryData[0].id)
+          setSelectedCategory(categoryData[0])
+        }
+      } catch (err) {
+        console.error('Error fetching card/categories:', err)
+      }
     }
+
+    if (cardId) fetchCard()
+  }, [cardId])
+
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = isModalOpen ? 'hidden' : 'auto'
   }, [isModalOpen])
 
-  if (!tarot) return <div className="p-4">Card not found.</div>
-  const selectedCategory = questionData.find((q) => q.key === category)
+  // Fetch questions whenever selected category changes
+  useEffect(() => {
+    if (!selectedCategory) return
+
+    const fetchQuestions = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/admin/questions/${selectedCategory.id}`
+        )
+        if (!res.ok) throw new Error('Failed to fetch questions')
+        const data = await res.json()
+        setQuestionList(data)
+      } catch (err) {
+        console.error('Error fetching questions:', err)
+      }
+    }
+
+    fetchQuestions()
+  }, [selectedCategory])
+
+  console.log(selectedCategory)
+
+  if (!tarot || categoryList.length === 0 || questionList.length === 0)
+    return <div className="p-4">Loading...</div>
 
   return (
     <div className="p-2">
+      {/* Modal */}
       {isModalOpen && (
         <TarotCardEditingModal
           setIsModalOpen={setIsModalOpen}
-          category={category}
+          category={selectedCategory.name}
           editingAnswer={editingAnswer}
         />
       )}
+
       <div className="flex items-center justify-end">
         <BackBt />
       </div>
 
       <div className="bg-white shadow-lg p-4 mt-2 rounded-[16px] border-2 border-[#9798F5] overflow-auto">
-        <h1 className="text-center font-bold text-[24px]">{tarot.card_name}</h1>
-
+        {/* Card Info */}
+        <h1 className="text-center font-bold text-[24px]">{tarot.name}</h1>
         <div className="flex justify-center mt-[16px]">
           <Image
-            src={tarot.img}
+            src={`/tarot_images/${tarot.image}`}
             width={128}
             height={294}
-            alt={tarot.card_name}
+            alt={tarot.name}
           />
         </div>
+        <div className="mt-4 mb-2 flex flex-col items-center">
+          <p>
+            <strong>Zodiac:</strong> {tarot.zodiac}
+          </p>
+          <p>
+            <strong>Numerology:</strong> {tarot.numerology}
+          </p>
+        </div>
 
-        <div className="flex items-center justify-start my-[16px]">
-          {questionData.map((q) => (
+        {/* Category Buttons */}
+        <div className="flex items-center justify-start my-[16px] flex-wrap">
+          {categoryList.map((c) => (
             <button
-              key={q.key}
-              className={`mr-[16px] border-2 border-[#9798F5] px-[24px] py-[8px] rounded-2xl shadow-2xl cursor-pointer ${
-                category === q.key ? 'active_btn' : ''
+              key={c.id}
+              className={`mr-[16px] mb-[8px] border-2 border-[#9798F5] px-[24px] py-[8px] rounded-2xl shadow-2xl cursor-pointer transition-all ${
+                category === c.id ? 'bg-[#9798F5] text-white' : ''
               }`}
-              onClick={() => setCategory(q.key)}
+              onClick={() => {
+                setCategory(c.id)
+                setSelectedCategory(c)
+              }}
             >
-              {q.label}
+              {c.name}
             </button>
           ))}
         </div>
 
         <div className="mb-[8px]">
           <span className="text-[18px] text-[#654597]">Category:</span>{' '}
-          {selectedCategory?.label}
+          {selectedCategory?.name}
         </div>
 
-        {selectedCategory &&
-          Object.entries(selectedCategory.questions).map(([key, question]) => (
-            <div key={key} className="mb-4">
+        {/* Questions */}
+        {questionList.length > 0 ? (
+          questionList.map((q, index) => (
+            <div key={q.id || index} className="mb-4">
               <div className="mb-[8px]">
-                <span className="font-bold">
-                  Question {key.replace('q', '')}:
-                </span>{' '}
-                {question}
+                <span className="font-bold">Question {index + 1}:</span>{' '}
+                {q.question_text}
               </div>
 
               <div className="border-2 border-[#9798F5] rounded-[16px] w-full h-[189px] p-2 mb-2 overflow-auto">
-                {tarot[category]?.[key] || 'No answer yet.'}
+                {q.answer || 'No answer yet.'}
               </div>
 
               <div className="flex">
@@ -92,9 +156,9 @@ const Page = () => {
                   className="flex items-center underline cursor-pointer font-bold mr-[24px]"
                   onClick={() => {
                     setEditingAnswer({
-                      key: key,
-                      question: question,
-                      answer: tarot[category]?.[key] || '', // current answer
+                      key: index,
+                      question: q.question_text,
+                      answer: q.answer || '',
                     })
                     setIsModalOpen(true)
                   }}
@@ -121,7 +185,10 @@ const Page = () => {
                 </button>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <p>No questions found for this category.</p>
+        )}
       </div>
     </div>
   )
