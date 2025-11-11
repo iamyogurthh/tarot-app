@@ -1,11 +1,4 @@
 TODO: 
-1. API have to return calculated user Zodiac & numerology value to the result page '/reading/page.tsx' line 63:75
-2. Missing API for Delete User account
-3. API need to provide a list of answer related to the question for specific category (right now api gave all meanings in the database that would reduce the performance)
-4. Need API for deleting a user account
-5. Need API for deleting a user tarot reading record 
-6. Missing DOB in returning user tarot reading record 
-7. We also need to add Image for category to display in the selecting category page 
 8. There is a bug on the backend when i select general
  ⨯ TypeError: Cannot read properties of undefined (reading 'id')
     at getCards (src\model\card.js:73:36)

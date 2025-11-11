@@ -40,5 +40,10 @@ export async function POST(req) {
     })
   }
   const cards = await getCards(topic)
-  return Response.json({ user_reading_id: readingId, cards })
+  return Response.json({
+    user_reading_id : readingId,
+    zodiac,
+    numerology,
+    cards
+  })
 }

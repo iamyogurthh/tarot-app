@@ -1,5 +1,5 @@
 import { deleteCategory, editCategory, getCategoryById } from '@/model/category'
-import { getDataFromForm } from '@/utils/utils.server'
+import { getDataFromForm, handleImageEdit } from '@/utils/utils.server'
 
 export async function GET(req, { params }) {
   const { id } = await params
@@ -13,8 +13,16 @@ export async function GET(req, { params }) {
 export async function PUT(req, { params }) {
   const { id } = await params
   const formData = await req.formData()
-  let { name } = getDataFromForm(formData, 'name')
-  const isOk = await editCategory(id, name)
+  let { name, image } = getDataFromForm(formData, 'name', 'image')
+
+  const existingCategory = await getCategoryById(id);
+  if (!existingCategory) {
+    return NextResponse.json({ message: 'Category not found' }, { status: 404 })
+  }
+
+  const finalImage = await handleImageEdit(image, existingCategory);
+
+  const isOk = await editCategory(id, name, finalImage)
 
   if (isOk) {
     return Response.json({ message: 'Successfully updated' })

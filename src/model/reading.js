@@ -124,3 +124,11 @@ export async function getReadingResultsByReadingId(id) {
   )
   return details
 }
+
+export async function deleteReadingUserByReadingId(id) {
+  const [result] = await pool.query(
+      `DELETE FROM readings WHERE id = ?`,
+      [id]
+  );
+  return result.affectedRows > 0;
+}

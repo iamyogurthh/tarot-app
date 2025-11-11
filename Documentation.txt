@@ -11,7 +11,7 @@ Response - { message : Successfully created}
 
         To create category
 POST - http://localhost:3000/api/categories
-Form Data - name 
+Form Data - name ,j image
 Response - { message : Successfully created}
 
         To create question
@@ -147,6 +147,28 @@ Response - [
     ...
 ]
 
+
+        To Get Meaning realted to the card and cateogory
+
+GET - http://localhost:3000/api/admin/meanings/[card_id]/[category_id]
+Response - [
+    {
+        question_id	: 1
+        question_no	: 1
+        question_text : "သင့်ကိုယ်သင် ဘယ်လိုခံစားနေရလဲ။"
+        meaning_id : 1
+        question_answer	: "အခုအချိန်မှာ သင်ဟာ စိတ်လွတ်လပ်စွာနဲ့ ဘာမှမစဉ်းစားချင်တဲ့အခြေအနေမှာ ရှိနေတာပါ။ အနာဂတ်ကိုစိုးရိမ်မနေဘဲ ရှိသမျှအခွင့်အလမ်းတွေကို စမ်းသပ်ချင်နေပါတယ်။"
+    },
+    {
+        question_id	: 2
+        question_no	: 2
+        question_text : "သင့်ကိုယ်သင် ဘယ်လိုခံစားနေရလဲ။"
+        meaning_id : 2
+        question_answer	: "အခုအချိန်မှာ သင်ဟာ စိတ်လွတ်လပ်စွာနဲ့ ဘာမှမစဉ်း...
+    }
+]
+
+
 -------------------------------------------------------------------------------------------------------------------------------------------
                                     Getting specific detail
 
@@ -180,7 +202,8 @@ Response - {
 GET - http://localhost:3000/api/categories/[category_id]
 Response - {
     "id": 1,
-    "name": "general"
+    "name": "general",
+    "image" : "general.jpg"
 }
 
         To get a specific question
@@ -216,7 +239,7 @@ Response - { message: "Successfully updated" }
 
         To update Category
 PUT - http://localhost:3000/api/categories/[category_id]
-Form Data - name
+Form Data - name , image
 Response - { message: "Successfully updated" }
 
 
@@ -256,8 +279,14 @@ DELETE - http://localhost:3000/api/meanings/[meaning_id]
 Response - { message: "Successfully deleted" }
 
 
+        To delete User
+DELETE - http://localhost:3000/api/users/[user_id]
+Response - { message: "Successfully deleted" }
 
 
+        To delete Reading User
+DELETE - http://localhost:3000/api/readings/[user_reading_id]
+Response - { message: "Successfully deleted" }
 
 
 
@@ -422,6 +451,7 @@ Response - [
         "reading_id": 2,
         "user_name": "alex",
         "full_name": "phyolay",
+        "major" : "cs",
         "reading_user_dob" : "2025-10-29T05:17:25.000Z",
         "topic": "business",
         "read_at": "2025-10-29T05:17:25.000Z"

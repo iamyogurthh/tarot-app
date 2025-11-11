@@ -15,7 +15,7 @@ export async function getCardById(id) {
     return card[0];
 }
 
-export async function createCard(name,zodiac,numerology,image){
+export async function createCard(name,zodiac,numerology,image=null){
     const isOk = await pool.query(`
     insert into cards (name,zodiac,numerology,image) values (?,?,?,?)
     `,[name,zodiac,numerology,image]);
@@ -26,7 +26,7 @@ export async function createCard(name,zodiac,numerology,image){
 
 }
 
-export async function editCard(id, name, zodiac, numerology, image) {
+export async function editCard(id, name, zodiac, numerology, image=null) {
     const [result] = await pool.query(
         `UPDATE cards 
          SET name = ?, zodiac = ?, numerology = ?, image = ? 

@@ -11,7 +11,8 @@ CREATE TABLE users (
 
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100) NOT NULL,
+    image VARCHAR(255)
 );
 
 CREATE TABLE readings (
@@ -76,11 +77,11 @@ INSERT INTO users (id, name, real_name, dob) VALUES
 (2, 'emma', 'emmasmith','2022-2-2'),
 (3, 'ryan', 'ryanlee', '2022-2-2' );
 
-INSERT INTO categories (id, name) VALUES
-(1, 'general'),
-(2, 'love'),
-(3, 'business'),
-(4, 'education');
+INSERT INTO categories (id, name, image) VALUES
+(1, 'general','general.jpg'),
+(2, 'love','love.jpg'),
+(3, 'business','business.jpg'),
+(4, 'education','education.jpg');
 
 INSERT INTO questions (category_id, question_no, question_text) VALUES
 (1, 1, 'သင့်ကိုယ်သင် ဘယ်လိုခံစားနေရလဲ။'),

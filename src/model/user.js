@@ -41,3 +41,11 @@ export async function getUserById(id) {
   )
   return users[0]
 }
+
+export async function deleteUserById(id) {
+  const [result] = await pool.query(
+      `DELETE FROM users WHERE id = ?`,
+      [id]
+  );
+  return result.affectedRows > 0;
+}

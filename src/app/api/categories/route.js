@@ -1,5 +1,5 @@
 import { createCategory, getAllCategories } from '@/model/category'
-import { getDataFromForm } from '@/utils/utils.server'
+import { getDataFromForm, handleImage } from '@/utils/utils.server'
 
 export async function GET(req, res) {
   const categories = await getAllCategories()
@@ -8,8 +8,9 @@ export async function GET(req, res) {
 
 export async function POST(req, res) {
   const formData = await req.formData()
-  let { name } = getDataFromForm(formData, 'name')
-  const isOk = await createCategory(name)
+  let { name, image } = getDataFromForm(formData, 'name', 'image')
+  const finalImage = await handleImage(image);
+  const isOk = await createCategory(name,finalImage);
   if (isOk) {
     return Response.json({ message: 'Successfully created' })
   }
