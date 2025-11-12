@@ -9,14 +9,11 @@ import FullScreenLoader from '@/components/FullScreenLoader'
 import { useTarot } from '@/context/TarotContext'
 
 const Page = () => {
-  const { formData, clearForm } = useForm()
+  const { formData, clearForm, updateField } = useForm()
   const [hovered, setHovered] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
   const { setTarotsForSelection } = useTarot()
-
-  console.log(formData)
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -49,7 +46,9 @@ const Page = () => {
         throw new Error('Failed to create user')
       } else {
         const data = await res.json()
-        console.log('Return from server 10 cards: ' + data)
+        console.log('Return from server 10 cards: ', data)
+        updateField('zodiac', data.zodiac)
+        updateField('numerology', data.numerology)
         setTarotsForSelection(data)
 
         router.push('/cardSelection')

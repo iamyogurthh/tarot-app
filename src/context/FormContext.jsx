@@ -11,6 +11,8 @@ export const FormProvider = ({ children }) => {
     dob: '',
     major: '',
     user_id: '',
+    numerology: '',
+    zodiac: '',
   })
 
   const updateField = (field, value) => {
@@ -25,6 +27,8 @@ export const FormProvider = ({ children }) => {
       dob: '',
       major: '',
       user_id: '',
+      numerology: '',
+      zodiac: '',
     })
   }
 

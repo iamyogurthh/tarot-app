@@ -11,6 +11,7 @@ const Page = () => {
   const [tarot, setTarot] = useState(null)
   const [categoryList, setCategoryList] = useState([])
   const [questionList, setQuestionList] = useState([])
+  const [answerList, setAnswerList] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [category, setCategory] = useState(null)
   const [editingAnswer, setEditingAnswer] = useState({
@@ -19,6 +20,8 @@ const Page = () => {
     answer: '',
   })
   const [selectedCategory, setSelectedCategory] = useState(null)
+
+  console.log(answerList)
 
   // Fetch tarot card & category list once when cardId changes
   useEffect(() => {
@@ -61,12 +64,21 @@ const Page = () => {
 
     const fetchQuestions = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/admin/questions/${selectedCategory.id}`
-        )
-        if (!res.ok) throw new Error('Failed to fetch questions')
-        const data = await res.json()
-        setQuestionList(data)
+        const [qRes, ansRes] = await Promise.all([
+          fetch(
+            `http://localhost:3000/api/admin/questions/${selectedCategory.id}`
+          ),
+          fetch(
+            `http://localhost:3000/api/admin/meanings/${cardId}/${selectedCategory.id}`
+          ),
+        ])
+        if (!qRes.ok) throw new Error('Failed to fetch questions')
+        const qData = await qRes.json()
+        setQuestionList(qData)
+
+        if (!ansRes.ok) throw new Error('Failed to fetch answers')
+        const ansData = await ansRes.json()
+        setAnswerList(ansData)
       } catch (err) {
         console.error('Error fetching questions:', err)
       }
@@ -75,7 +87,20 @@ const Page = () => {
     fetchQuestions()
   }, [selectedCategory])
 
-  console.log(selectedCategory)
+  // Function to refresh the answers
+  const refreshAnswers = async () => {
+    if (!selectedCategory) return
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/admin/meanings/${cardId}/${selectedCategory.id}`
+      )
+      if (!res.ok) throw new Error('Failed to fetch answers')
+      const data = await res.json()
+      setAnswerList(data)
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   if (!tarot || categoryList.length === 0 || questionList.length === 0)
     return <div className="p-4">Loading...</div>
@@ -88,6 +113,9 @@ const Page = () => {
           setIsModalOpen={setIsModalOpen}
           category={selectedCategory.name}
           editingAnswer={editingAnswer}
+          cardId={cardId}
+          categoryId={selectedCategory.id}
+          onUpdated={refreshAnswers}
         />
       )}
 
@@ -138,54 +166,84 @@ const Page = () => {
           {selectedCategory?.name}
         </div>
 
-        {/* Questions */}
+        {/* Questions + Answers */}
         {questionList.length > 0 ? (
-          questionList.map((q, index) => (
-            <div key={q.id || index} className="mb-4">
-              <div className="mb-[8px]">
-                <span className="font-bold">Question {index + 1}:</span>{' '}
-                {q.question_text}
-              </div>
+          questionList.map((q, index) => {
+            // find matching answer by question_id
+            const answer = answerList.find((a) => a.question_id === q.id)
 
-              <div className="border-2 border-[#9798F5] rounded-[16px] w-full h-[189px] p-2 mb-2 overflow-auto">
-                {q.answer || 'No answer yet.'}
-              </div>
+            return (
+              <div key={q.id || index} className="mb-4">
+                <div className="mb-[8px]">
+                  <span className="font-bold">Question {index + 1}:</span>{' '}
+                  {q.question_text || 'No question yet.'}
+                </div>
 
-              <div className="flex">
-                <button
-                  className="flex items-center underline cursor-pointer font-bold mr-[24px]"
-                  onClick={() => {
-                    setEditingAnswer({
-                      key: index,
-                      question: q.question_text,
-                      answer: q.answer || '',
-                    })
-                    setIsModalOpen(true)
-                  }}
-                >
-                  <Image
-                    src={'/system_images/edit.png'}
-                    width={24}
-                    height={24}
-                    alt="edit"
-                    className="mr-[8px]"
-                  />
-                  Edit Answer
-                </button>
+                <div className="border-2 border-[#9798F5] rounded-[16px] w-full h-[189px] p-2 mb-2 overflow-auto">
+                  {answer ? answer.question_answer : 'No answer yet.'}
+                </div>
 
-                <button className="flex items-center underline cursor-pointer font-bold">
-                  <Image
-                    src={'/system_images/trash.png'}
-                    width={18}
-                    height={18}
-                    alt="delete"
-                    className="mr-[8px]"
-                  />
-                  Delete Answer
-                </button>
+                <div className="flex">
+                  <button
+                    className="flex items-center underline cursor-pointer font-bold mr-[24px]"
+                    onClick={() => {
+                      setEditingAnswer({
+                        key: answer ? answer.meaning_id : '', // use meaning_id
+                        question_id: q.id,
+                        question: q.question_text,
+                        answer: answer ? answer.question_answer : '',
+                      })
+                      setIsModalOpen(true)
+                    }}
+                  >
+                    <Image
+                      src={'/system_images/edit.png'}
+                      width={24}
+                      height={24}
+                      alt="edit"
+                      className="mr-[8px]"
+                    />
+                    Edit Answer
+                  </button>
+
+                  <button
+                    className="flex items-center underline cursor-pointer font-bold"
+                    onClick={() => {
+                      if (!answer) return alert('No answer to delete.')
+                      if (
+                        confirm('Are you sure you want to delete this answer?')
+                      ) {
+                        fetch(
+                          `http://localhost:3000/api/meanings/${answer.meaning_id}`,
+                          { method: 'DELETE' }
+                        )
+                          .then((res) => res.json())
+                          .then((data) => {
+                            alert(data.message || 'Deleted successfully!')
+                            // refresh answers
+                            fetch(
+                              `http://localhost:3000/api/admin/meanings/${cardId}/${selectedCategory.id}`
+                            )
+                              .then((r) => r.json())
+                              .then((d) => setAnswerList(d))
+                          })
+                          .catch((err) => console.error('Delete error:', err))
+                      }
+                    }}
+                  >
+                    <Image
+                      src={'/system_images/trash.png'}
+                      width={18}
+                      height={18}
+                      alt="delete"
+                      className="mr-[8px]"
+                    />
+                    Delete Answer
+                  </button>
+                </div>
               </div>
-            </div>
-          ))
+            )
+          })
         ) : (
           <p>No questions found for this category.</p>
         )}

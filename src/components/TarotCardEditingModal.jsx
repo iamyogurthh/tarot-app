@@ -1,11 +1,70 @@
 'use client'
 import Image from 'next/image'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
 
-const TarotCardEditingModal = ({ setIsModalOpen, category, editingAnswer }) => {
+const TarotCardEditingModal = ({
+  setIsModalOpen,
+  category,
+  categoryId,
+  cardId,
+  editingAnswer,
+  onUpdated,
+}) => {
+  const [answer, setAnswer] = useState(editingAnswer.answer)
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('card_id', cardId)
+      formData.append('question_id', editingAnswer.question_id)
+      formData.append('category_id', categoryId)
+      formData.append('question_answer', answer)
+
+      let res
+
+      if (editingAnswer.key) {
+        // Meaning exists → update
+        res = await fetch(
+          `http://localhost:3000/api/meanings/${editingAnswer.key}`,
+          { method: 'PUT', body: formData }
+        )
+      } else {
+        // Meaning does not exist → create
+        res = await fetch('http://localhost:3000/api/meanings', {
+          method: 'POST',
+          body: formData,
+        })
+      }
+
+      const data = await res.json()
+      if (res.ok) {
+        alert(data.message || 'Successfully saved!')
+        onUpdated?.() // Refresh parent component
+        setIsModalOpen(false)
+      } else {
+        alert(data.message || 'Failed to save.')
+      }
+    } catch (err) {
+      console.error('Save error:', err)
+      alert('Something went wrong.')
+    } finally {
+      router.refresh()
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="bg-[#00000091] fixed top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center p-[40px]">
-      <form className="bg-white rounded-[16px] p-[16px] relative w-full max-w-[70%]">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white rounded-[16px] p-[16px] relative w-full max-w-[70%]"
+      >
         <Image
           src={'/system_images/close.png'}
           alt="close"
@@ -21,17 +80,26 @@ const TarotCardEditingModal = ({ setIsModalOpen, category, editingAnswer }) => {
           Category:{' '}
           <span className="text-black font-semibold">{category} </span>
         </p>
+
         <div className="mb-[8px]">
           <span className="font-bold mr-2">Question:</span>
           <span>{editingAnswer.question}</span>
         </div>
 
         <textarea
-          defaultValue={editingAnswer.answer}
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
           className="border-2 border-[#9798F5] rounded-[16px] w-full h-[189px] p-2 mb-2 resize-none text-left align-top"
         ></textarea>
+
         <div className="flex items-center justify-center">
-          <button className="primary_btn">Submit Edited</button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="primary_btn disabled:opacity-50"
+          >
+            {loading ? 'Saving...' : 'Submit Edited'}
+          </button>
         </div>
       </form>
     </div>

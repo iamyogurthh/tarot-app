@@ -3,20 +3,32 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 
 const AddNewCategoryModal = ({ setIsAddModalOpen }) => {
-  const [category, setCategory] = useState('')
-  const handleSubmit = async () => {
+  const [categoryName, setCategoryName] = useState('')
+  const [categoryImage, setCategoryImage] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+
     try {
       const formData = new FormData()
-      formData.append('name', category)
+      formData.append('name', categoryName)
+      if (categoryImage) formData.append('image', categoryImage)
+
       const res = await fetch(`http://localhost:3000/api/categories`, {
         method: 'POST',
         body: formData,
       })
-      if (!res.ok) throw new Error('failed to add new category')
+
+      if (!res.ok) throw new Error('Failed to add new category')
       const data = await res.json()
       console.log(data.message)
+      setIsAddModalOpen(false) // close modal
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -38,25 +50,47 @@ const AddNewCategoryModal = ({ setIsAddModalOpen }) => {
           Adding New Category
         </h1>
 
-        <div className="flex flex-col">
-          <label htmlFor="name" className="mb-4 font-semibold">
+        <div className="flex flex-col mb-4">
+          <label htmlFor="img" className="mb-2 font-semibold">
+            Category Image
+          </label>
+          <label className="cursor-pointer">
+            <img
+              src={
+                categoryImage
+                  ? URL.createObjectURL(categoryImage)
+                  : '/system_images/tarot_card_back.png'
+              }
+              className="w-[227px] h-[370px] object-cover rounded-lg "
+            />
+            <input
+              id="img"
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => setCategoryImage(e.target.files[0])}
+            />
+          </label>
+        </div>
+
+        <div className="flex flex-col mb-4">
+          <label htmlFor="name" className="mb-2 font-semibold">
             Category Name
           </label>
           <input
             id="name"
             type="text"
-            placeholder="Enter new category"
-            className="w-[328px]  py-[8px] pl-[16px] border-2 border-[#9798F5]  rounded-[16px] bg-white focus:outline-none"
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value)
-            }}
+            placeholder="Enter category name"
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+            className="w-[328px] py-[8px] pl-[16px] border-2 border-[#9798F5] rounded-[16px] bg-white focus:outline-none shadow-lg"
+            required
           />
         </div>
 
         <div className="flex items-center justify-center mt-4">
-          <button className="primary_btn" type="submit">
-            Submit
+          <button type="submit" className="primary_btn" disabled={loading}>
+            {loading ? 'Adding...' : 'Submit'}
           </button>
         </div>
       </form>

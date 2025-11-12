@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import React from 'react'
 import { formatBirthDate } from '@/utils/utils.client'
+import DeleteBtn from '@/components/DeleteBtn'
 
 const Page = async () => {
   let data = []
@@ -48,13 +49,7 @@ const Page = async () => {
           >
             View Detail
           </Link>
-          <Image
-            src="/system_images/trash.png"
-            alt="trash"
-            width={24}
-            height={27}
-            className="cursor-pointer"
-          />
+          <DeleteBtn endpoint="http://localhost:3000/api/users" id={row.id} />
         </div>
       ),
     },

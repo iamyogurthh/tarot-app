@@ -6,6 +6,7 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { formatBirthDate, formatDateTime } from '@/utils/utils.client'
+import DeleteBtn from '@/components/DeleteBtn'
 
 const page = async ({ params }) => {
   const { userId } = await params
@@ -30,8 +31,6 @@ const page = async ({ params }) => {
     { label: 'Full Name:', value: userData.real_name },
     { label: 'Birthday:', value: formatBirthDate(userData.dob) },
   ]
-
-  console.log(data)
 
   const columns = [
     {
@@ -71,12 +70,9 @@ const page = async ({ params }) => {
           >
             View Detail
           </Link>
-          <Image
-            src={'/system_images/trash.png'}
-            alt="trash"
-            width={24}
-            height={27}
-            className="cursor-pointer"
+          <DeleteBtn
+            endpoint="http://localhost:3000/api/readings"
+            id={row.reading_id}
           />
         </div>
       ),

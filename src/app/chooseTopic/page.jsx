@@ -69,9 +69,13 @@ const ChooseTopicPage = () => {
             <div className="relative w-[227px] h-[370px] rounded-[24px] overflow-hidden shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
               <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-[24px]">
                 {/* Image placeholder, can replace with cat.image later */}
-                <span className="text-gray-600 font-bold text-xl">
-                  {cat.name}
-                </span>
+                <Image
+                  src={`/tarot_images/${cat.image}`}
+                  alt={cat.name}
+                  width={227}
+                  height={370}
+                  className="w-full h-full bg-gray-200 flex items-center justify-center rounded-[24px]"
+                />
               </div>
 
               {/* Overlay */}

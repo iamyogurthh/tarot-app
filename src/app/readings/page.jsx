@@ -10,8 +10,7 @@ import { useRouter } from 'next/navigation'
 const Readings = () => {
   const { userSelectedTarotData } = useTarot()
   const { formData } = useForm()
-  const [cardIndex, setCardIndex] = useState(0) // Which card we are on
-  const [questionIndex, setQuestionIndex] = useState(0) // Which question within the card
+  const [position, setPosition] = useState(0) // which selected card position we are on
   const router = useRouter()
 
   // Redirect if missing data
@@ -27,37 +26,63 @@ const Readings = () => {
     }
   }, [formData, userSelectedTarotData, router])
 
-  const card = userSelectedTarotData[cardIndex]
   const topic = formData.topic
-  const topicQuestions = card?.[topic] || []
-  const currentQuestion = topicQuestions[questionIndex] || {}
+  const totalCards = userSelectedTarotData?.length || 0
 
-  // Navigation handlers
+  // clamp position so we never go out of bounds
+  useEffect(() => {
+    if (position < 0 && totalCards > 0) setPosition(0)
+    if (position >= totalCards && totalCards > 0) setPosition(totalCards - 1)
+  }, [position, totalCards])
+
+  const currentCard = userSelectedTarotData?.[position]
+  const cardTopicArray = currentCard?.[topic] || []
+
+  // *** key logic: pick the question at the SAME index as the card position ***
+  let currentQuestion = cardTopicArray?.[position]
+
+  // fallback: try to find question with question_id = 19 + position
+  if (!currentQuestion) {
+    const possibleId = 19 + position
+    currentQuestion = cardTopicArray?.find((q) => q.question_id === possibleId)
+  }
+
+  // final fallback: first question of that card's topic
+  if (!currentQuestion) {
+    currentQuestion = cardTopicArray?.[0] || {}
+  }
+
+  // compute totalQuestions (for pagination dots) from the first card's topic length (or current card if you prefer)
+  const totalQuestions =
+    userSelectedTarotData?.[0]?.[topic]?.length || cardTopicArray.length || 0
+
+  // find index of currentQuestion inside this card's topic array (0..totalQuestions-1)
+  let currentQuestionIndex = cardTopicArray.findIndex(
+    (q) => q === currentQuestion
+  )
+  if (currentQuestionIndex === -1) currentQuestionIndex = 0
+
+  // Navigation: move through cards; each step shows that card's question at the same index
   const handleNext = () => {
-    if (questionIndex < topicQuestions.length - 1) {
-      setQuestionIndex(questionIndex + 1)
-    } else if (cardIndex < userSelectedTarotData.length - 1) {
-      setCardIndex(cardIndex + 1)
-      setQuestionIndex(0)
+    if (position < totalCards - 1) {
+      setPosition((p) => p + 1)
     }
   }
 
   const handlePrev = () => {
-    if (questionIndex > 0) {
-      setQuestionIndex(questionIndex - 1)
-    } else if (cardIndex > 0) {
-      const prevCardQuestions =
-        userSelectedTarotData[cardIndex - 1]?.[topic] || []
-      setCardIndex(cardIndex - 1)
-      setQuestionIndex(prevCardQuestions.length - 1)
+    if (position > 0) {
+      setPosition((p) => p - 1)
     }
   }
+
+  const atFirst = position === 0
+  const atLast = position === Math.max(totalCards - 1, 0)
 
   return (
     <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
       <MainMenuBtn />
 
-      {/* User Info Section */}
+      {/* User Info Section (kept the same as your original) */}
       <div className="flex pt-[16px] items-center justify-start flex-wrap gap-4">
         <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[48px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <p className="mb-[8px]">Your Zodiac Sign</p>
@@ -71,7 +96,9 @@ const Readings = () => {
 
         <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[32px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
           <p>Your Numerology Value</p>
-          <p className="font-bold text-[60px] text-[#9798F5]">5</p>
+          <p className="font-bold text-[60px] text-[#9798F5]">
+            {formData.numerology}
+          </p>
         </div>
 
         <div className="h-[153px] bg-[#ffffff8b] py-[16px] px-[32px] rounded-2xl font-semibold shadow-md text-center border-2 border-[#9798F5] flex flex-col items-center justify-center">
@@ -116,12 +143,12 @@ const Readings = () => {
       </div>
 
       {/* Card Reading */}
-      {card && (
+      {currentCard && (
         <div className="flex-grow mt-[16px] mb-6 bg-[#ffffff3f] rounded-[16px] border-2 border-[#9798F5] p-5 sm:p-8 md:p-10 shadow-xl relative flex flex-col justify-between">
           {/* Title */}
           <div className="flex items-center justify-center absolute top-[4px] z-50 left-0 right-0">
             <h3 className="bg-white text-center px-[80px] py-2 mt-3 rounded-[24px] border-2 shadow-md border-[#9798F5] text-dark_p font-bold text-lg">
-              {card.name}
+              {currentCard.name}
             </h3>
           </div>
 
@@ -129,13 +156,13 @@ const Readings = () => {
             {/* Card Image */}
             <div className="flex flex-col items-center">
               <Image
-                src={`/tarot_images/${card.image}`}
-                alt={card.name}
+                src={`/tarot_images/${currentCard.image}`}
+                alt={currentCard.name}
                 width={160}
                 height={240}
                 className="rounded-xl shadow-lg object-cover"
               />
-              <h2 className="text-[24px] font-bold mt-4">{card.name}</h2>
+              <h2 className="text-[24px] font-bold mt-4">{currentCard.name}</h2>
             </div>
 
             {/* Meaning Section */}
@@ -152,7 +179,7 @@ const Readings = () => {
           {/* Navigation Arrows */}
           <button
             onClick={handlePrev}
-            disabled={cardIndex === 0 && questionIndex === 0}
+            disabled={atFirst}
             className="cursor-pointer absolute top-1/2 left-3 sm:left-4 transform -translate-y-1/2 hover:scale-110 transition disabled:opacity-30"
           >
             <Image
@@ -165,10 +192,7 @@ const Readings = () => {
 
           <button
             onClick={handleNext}
-            disabled={
-              cardIndex === userSelectedTarotData.length - 1 &&
-              questionIndex === topicQuestions.length - 1
-            }
+            disabled={atLast}
             className="cursor-pointer absolute top-1/2 right-3 sm:right-4 transform -translate-y-1/2 hover:scale-110 transition disabled:opacity-30"
           >
             <Image
@@ -179,15 +203,15 @@ const Readings = () => {
             />
           </button>
 
-          {/* Pagination Dots */}
+          {/* Pagination for questions (6 dots total) */}
           <div className="flex justify-center mt-4 gap-2">
-            {topicQuestions.map((_, i) => (
+            {Array.from({ length: totalQuestions }).map((_, i) => (
               <span
                 key={i}
                 className={`w-6 h-2 rounded-full transition-all duration-300 ${
-                  i === questionIndex ? 'bg-[#8854d0]' : 'bg-gray-300'
+                  i === currentQuestionIndex ? 'bg-[#8854d0]' : 'bg-gray-300'
                 }`}
-              ></span>
+              />
             ))}
           </div>
         </div>

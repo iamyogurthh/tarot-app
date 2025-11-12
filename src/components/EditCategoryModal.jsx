@@ -8,8 +8,10 @@ const EditCategoryModal = ({
   onSuccess,
 }) => {
   const [categoryName, setCategoryName] = useState('')
+  const [categoryImage, setCategoryImage] = useState(null) // for new image preview
+  const [existingImage, setExistingImage] = useState('') // for current image URL
 
-  // Fetch current category name
+  // Fetch current category data
   useEffect(() => {
     async function fetchCategory() {
       try {
@@ -19,6 +21,7 @@ const EditCategoryModal = ({
         if (!res.ok) throw new Error('Failed to fetch category')
         const data = await res.json()
         setCategoryName(data.name)
+        setExistingImage(data.image) // assuming your API returns image path
       } catch (err) {
         console.error(err)
       }
@@ -26,12 +29,12 @@ const EditCategoryModal = ({
     fetchCategory()
   }, [categoryId])
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       const formData = new FormData()
       formData.append('name', categoryName)
+      if (categoryImage) formData.append('image', categoryImage)
 
       const res = await fetch(
         `http://localhost:3000/api/categories/${categoryId}`,
@@ -70,7 +73,35 @@ const EditCategoryModal = ({
           Edit Category
         </h1>
 
-        <div className="flex flex-col">
+        {/* Category Image */}
+        <div className="flex flex-col mb-4 items-center">
+          <label htmlFor="img" className="mb-2 font-semibold">
+            Category Image
+          </label>
+          <label className="cursor-pointer">
+            <img
+              src={
+                categoryImage
+                  ? URL.createObjectURL(categoryImage)
+                  : existingImage
+                  ? `/tarot_images/${existingImage}`
+                  : '/system_images/tarot_card_back.png'
+              }
+              alt="Category Preview"
+              className="w-[227px] h-[370px] object-cover rounded-lg"
+            />
+            <input
+              type="file"
+              id="img"
+              accept="image/*"
+              hidden
+              onChange={(e) => setCategoryImage(e.target.files[0])}
+            />
+          </label>
+        </div>
+
+        {/* Category Name */}
+        <div className="flex flex-col mb-4">
           <label htmlFor="name" className="mb-2 font-semibold">
             Category Name
           </label>

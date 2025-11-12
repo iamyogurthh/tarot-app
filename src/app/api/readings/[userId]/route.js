@@ -1,5 +1,8 @@
 import { getCategoryByCategoryId } from '@/model/category'
-import { deleteReadingUserByReadingId, getReadingUsersByUserId } from '@/model/reading'
+import {
+  deleteReadingUserByReadingId,
+  getReadingUsersByUserId,
+} from '@/model/reading'
 import { getUserById } from '@/model/user'
 
 export async function GET(req, { params }) {
@@ -13,7 +16,7 @@ export async function GET(req, { params }) {
     result.push({
       reading_id: overviews[i].id,
       full_name: overviews[i].real_name,
-      major : overviews[i].major,
+      major: overviews[i].major,
       reading_user_dob: overviews[i].dob,
       topic: category,
       read_at: overviews[i].read_at,
@@ -22,10 +25,8 @@ export async function GET(req, { params }) {
   return Response.json(result)
 }
 
-
-
 export async function DELETE(req, { params }) {
-  const { id } = params
+  const { id } = await params
   const isOk = await deleteReadingUserByReadingId(id)
 
   if (isOk) {

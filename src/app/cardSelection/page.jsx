@@ -15,13 +15,17 @@ const CardSelection = () => {
   const [cardsToShow, setCardsToShow] = useState([]) // Cards displayed on screen (10 cards)
   const [selectedCardIds, setSelectedCardIds] = useState([]) // Cards user actively selects (starts empty)
   const { clearForm, formData } = useForm()
-  const { setUserSelectedTarotData, tarotsForSelection } = useTarot()
+  const {
+    setUserSelectedTarotData,
+    tarotsForSelection,
+    userSelectedTarotData,
+  } = useTarot()
   const router = useRouter()
 
-  const { cards } = tarotsForSelection
+  console.log('Selected cards are: ', selectedCardIds)
+  console.log('tarotsForSelection are: ', userSelectedTarotData)
 
-  console.log(formData)
-  console.log(tarotsForSelection.user_reading_id)
+  const { cards } = tarotsForSelection
 
   useEffect(() => {
     if (cards && cards.length > 0) {
@@ -64,8 +68,6 @@ const CardSelection = () => {
         [formData.topic]: dataArray, // dynamic topic key
       }
 
-      console.log('Sending payload:', payload)
-
       const response = await fetch('/api/readings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -73,7 +75,6 @@ const CardSelection = () => {
       })
 
       const result = await response.json()
-      console.log('Server response:', result)
 
       if (response.ok) {
         // Store selected cards in context
