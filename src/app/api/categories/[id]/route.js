@@ -1,4 +1,4 @@
-import { deleteCategory, editCategory, getCategoryById } from '@/model/category'
+import { deleteCategory, editCategory, getCategoryById, getCategoryByName } from '@/model/category'
 import { getDataFromForm, handleImageEdit } from '@/utils/utils.server'
 
 export async function GET(req, { params }) {
@@ -19,6 +19,12 @@ export async function PUT(req, { params }) {
   if (!existingCategory) {
     return NextResponse.json({ message: 'Category not found' }, { status: 404 })
   }
+
+  const isExistingCategory = await getCategoryByName(name);
+  if(isExistingCategory){
+    return NextResponse.json({ message: 'Category already exists' }, { status: 400 })
+  }
+
 
   const finalImage = await handleImageEdit(image, existingCategory);
 

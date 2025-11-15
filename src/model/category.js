@@ -14,6 +14,13 @@ export async function getCategoryById(id) {
     return category[0];
 }
 
+export async function getCategoryByName(name) {
+    const [category] = await pool.query(`
+    select * from categories where name=?
+    `, [name])
+    return category[0];
+}
+
 
 export async function getCategoryIDByCategoryName(name) {
     const [category] = await pool.query(`

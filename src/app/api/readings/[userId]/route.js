@@ -26,7 +26,7 @@ export async function GET(req, { params }) {
 }
 
 export async function DELETE(req, { params }) {
-  const { id } = await params
+  const { userId : id } = await params;
   const isOk = await deleteReadingUserByReadingId(id)
 
   if (isOk) {

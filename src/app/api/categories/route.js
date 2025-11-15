@@ -1,4 +1,4 @@
-import { createCategory, getAllCategories } from '@/model/category'
+import { createCategory, getAllCategories, getCategoryByName, getCategoryIDByCategoryName } from '@/model/category'
 import { getDataFromForm, handleImage } from '@/utils/utils.server'
 
 export async function GET(req, res) {
@@ -9,6 +9,10 @@ export async function GET(req, res) {
 export async function POST(req, res) {
   const formData = await req.formData()
   let { name, image } = getDataFromForm(formData, 'name', 'image')
+  let existingCategory = await getCategoryByName(name);
+  if(existingCategory){
+    return Response.json({message : "Category already exists !"},{status : 400});
+  }
   const finalImage = await handleImage(image);
   const isOk = await createCategory(name,finalImage);
   if (isOk) {
