@@ -7,7 +7,7 @@ import Image from 'next/image'
 import EditQuestionModal from '@/components/EditQuestionModal'
 import AddNewCategoryModal from '@/components/AddNewCategoryModal'
 import AddNewQuestionModal from '@/components/AddNewQuestionModal'
-import EditCategoryModal from '@/components/EditCategoryModal' // ✅ new
+import EditCategoryModal from '@/components/EditCategoryModal' //
 
 const Page = () => {
   const [categories, setCategories] = useState([])
@@ -16,7 +16,7 @@ const Page = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false)
-  const [isEditCategoryOpen, setIsEditCategoryOpen] = useState(false) // ✅ edit category
+  const [isEditCategoryOpen, setIsEditCategoryOpen] = useState(false) //
   const [editingQuestion, setEditingQuestion] = useState({
     id: '',
     question_no: '',
@@ -209,7 +209,7 @@ const Page = () => {
           />
         )}
 
-        {/* ✅ Edit Category Modal */}
+        {/* Edit Category Modal */}
         {isEditCategoryOpen && editingCategoryId && (
           <EditCategoryModal
             setIsEditCategoryOpen={setIsEditCategoryOpen}

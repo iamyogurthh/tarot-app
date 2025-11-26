@@ -1,11 +1,13 @@
 'use client'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
-const AddNewCategoryModal = ({ setIsAddModalOpen }) => {
+const AddNewCategoryModal = ({ setIsAddModalOpen, onSuccess }) => {
   const [categoryName, setCategoryName] = useState('')
   const [categoryImage, setCategoryImage] = useState(null)
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -13,6 +15,10 @@ const AddNewCategoryModal = ({ setIsAddModalOpen }) => {
 
     try {
       const formData = new FormData()
+      if (categoryImage === null) {
+        alert('Image missing')
+        return
+      }
       formData.append('name', categoryName)
       if (categoryImage) formData.append('image', categoryImage)
 
@@ -21,17 +27,33 @@ const AddNewCategoryModal = ({ setIsAddModalOpen }) => {
         body: formData,
       })
 
-      if (!res.ok) throw new Error('Failed to add new category')
       const data = await res.json()
+
+      // Handle duplicate category
+      if (res.status === 400 && data.message === 'Category already exists !') {
+        alert('Category already exists. Please use another name.')
+        return
+      }
+
+      // For any other failure
+      if (!res.ok) {
+        alert(data.message || 'Failed to add new category')
+        return
+      }
+
       console.log(data.message)
+
+      if (onSuccess) onSuccess()
+
       setIsAddModalOpen(false) // close modal
     } catch (error) {
       console.log(error)
+      alert('Something went wrong!')
     } finally {
       setLoading(false)
+      router.refresh()
     }
   }
-
   return (
     <div className="bg-[#00000091] fixed top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center p-[40px]">
       <form

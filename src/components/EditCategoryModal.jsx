@@ -44,8 +44,19 @@ const EditCategoryModal = ({
         }
       )
 
-      if (!res.ok) throw new Error('Failed to update category')
       const data = await res.json()
+
+      // Handle duplicate name case
+      if (res.status === 400 && data.message === 'Category already exists') {
+        alert('Category name already exists. Please use another name.')
+        return
+      }
+
+      if (!res.ok) {
+        alert(data.message || 'Failed to update category')
+        return
+      }
+
       alert(data.message)
       onSuccess()
       setIsEditCategoryOpen(false)
