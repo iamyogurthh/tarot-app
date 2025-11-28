@@ -7,6 +7,7 @@ import { getZodiacSign } from '@/utils/utils.server'
 
 export async function GET(req, res) {
   const users = await getAllUsers()
+  console.log("URL is " , req.url)
   return Response.json(users)
 }
 

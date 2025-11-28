@@ -9,6 +9,24 @@ export async function getAllCards() {
     return rows;
 }
 
+export async function getCardsBySearchQuery(keyword) {
+    const search = `%${keyword}%`;
+  
+    const [cards] = await pool.query(
+      `
+      SELECT *
+      FROM cards
+      WHERE name LIKE ?
+         OR zodiac LIKE ?
+         OR numerology LIKE ?
+      `,
+      [search, search, search]
+    );
+  
+    return cards;
+  }
+  
+
 export async function getCardById(id) {
     const [card] = await pool.query(`
     SELECT * FROM cards where id=?`, [id]);

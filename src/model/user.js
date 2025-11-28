@@ -8,6 +8,23 @@ export async function getAllUsers() {
   return users;
 }
 
+export async function getUsersBySearchQuery(keyword) {
+  const search = `%${keyword}%`;
+
+  const [users] = await pool.query(
+    `
+    SELECT *
+    FROM users
+    WHERE name LIKE ? 
+       OR real_name LIKE ?
+    `,
+    [search, search]
+  );
+
+  return users;
+}
+
+
 export async function createUser(user_name, full_name, dob) {
   const [result] = await pool.query(
     `

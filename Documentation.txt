@@ -67,6 +67,7 @@ Response - [
     ...
 ]
 
+-------------------------------------------------------------------------
 
         To get a list of cards
 GET - http://localhost:3000/api/cards
@@ -87,6 +88,28 @@ Response - [
     },
     ....
 ]
+-------------------------------------------------------------------------------
+
+                 To search cards
+GET - http://localhost:3000/api/cards?keyword=something
+Response - [
+    {
+        "id": 1,
+        "name": "The Fool",
+        "zodiac": "Uranus",
+        "numerology": "0",
+        "image": "fool.jpg"
+    },
+    {
+        "id": 2,
+        "name": "The Magician",
+        "zodiac": "Mercury",
+        "numerology": "1",
+        "image": "magician.jpg"
+    },
+    ....
+]
+------------------------------------------------------------------------------
 
 
         To get a list of questions
@@ -422,7 +445,7 @@ Response - {
 
 
 ----------------------------------------------------------------------------------------------
-
+                                Admin
 
 
         For Admin to get a list of users
@@ -442,8 +465,22 @@ Response - [
 
 ]
 
+------------------------------------------------------------------------
 
 
+        For Admin to search users
+        
+Get - http://localhost:3000/api/admin?keyword=something
+Response - [
+    {
+        "user_name":"alex",
+        "real_name":"alexjohn",
+        "major":"cs",
+    },
+    ....
+
+]
+----------------------------------------------------------------------------
         To get a list of reading related to the user_name
 Get - http://localhost:3000/api/readings/[user_id]
 Response - [

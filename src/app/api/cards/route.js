@@ -1,9 +1,20 @@
-import { createCard, getAllCards } from '@/model/card'
+import { createCard, getAllCards, getCardsBySearchQuery } from '@/model/card'
 import { getDataFromForm, handleImage } from '@/utils/utils.server'
 
-export async function GET(req, res) {
-  const cards = await getAllCards()
-  return Response.json(cards)
+
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const keyword = searchParams.get("keyword");
+
+  let cards;
+
+  if (keyword) {
+    cards = await getCardsBySearchQuery(keyword);
+  } else {
+    cards = await getAllCards();
+  }
+
+  return Response.json(cards);
 }
 
 export async function POST(req, res) {
