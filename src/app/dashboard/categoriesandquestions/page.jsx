@@ -134,7 +134,7 @@ const Page = () => {
               })
               setIsEditModalOpen(true)
             }}
-            className="flex items-center underline font-semibold"
+            className="flex items-center underline font-semibold cursor-pointer"
           >
             <Image
               src="/system_images/edit.png"
@@ -148,7 +148,7 @@ const Page = () => {
 
           <button
             onClick={() => handleDeleteQuestion(item.id)}
-            className="flex items-center underline font-semibold text-red-600"
+            className="flex items-center underline font-semibold text-red-600 cursor-pointer"
           >
             <Image
               src="/system_images/trash.png"

@@ -66,14 +66,16 @@ const page = async ({ params }) => {
         <div className="flex">
           <Link
             href={`/readings/${userId}/${row.reading_id}`}
-            className="mr-[40px] cursor-pointer underline font-semibold hover:text-[#9798F5]"
+            className="mr-[40px] cursor-pointer underline font-semibold hover:text-[#9798F5] "
           >
             View Detail
           </Link>
-          <DeleteBtn
-            endpoint="http://localhost:3000/api/readings"
-            id={row.reading_id}
-          />
+          <div>
+            <DeleteBtn
+              endpoint="http://localhost:3000/api/readings"
+              id={row.reading_id}
+            />
+          </div>
         </div>
       ),
     },

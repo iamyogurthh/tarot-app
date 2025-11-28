@@ -1,42 +1,63 @@
+'use client'
+
 import Banner from '@/components/Banner'
 import ReuseableTable from '@/components/ReuseableTable'
 import SearchBox from '@/components/SearchBox'
 import Link from 'next/link'
-import Image from 'next/image'
-import React from 'react'
-import { formatBirthDate } from '@/utils/utils.client'
+import React, { useEffect, useState } from 'react'
 import DeleteBtn from '@/components/DeleteBtn'
+import { formatBirthDate } from '@/utils/utils.client'
 
-const Page = async () => {
-  let data = []
+const Page = () => {
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  try {
-    const res = await fetch('http://localhost:3000/api/admin', {
-      cache: 'no-store',
-    })
-    if (!res.ok) {
-      throw new Error('Failed to fetch data')
+  console.log(data)
+
+  // Fetch users with optional search keyword
+  const fetchUsers = async (keyword = '') => {
+    try {
+      setLoading(true)
+
+      const res = await fetch(
+        `http://localhost:3000/api/admin?keyword=${keyword}`,
+        { cache: 'no-store' }
+      )
+
+      if (!res.ok) throw new Error('Failed to fetch users')
+
+      const json = await res.json()
+      setData(json)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
     }
-    data = await res.json()
-  } catch (err) {
-    console.error('Error fetching data:', err)
   }
+
+  // Load all users on mount
+  useEffect(() => {
+    fetchUsers()
+  }, [])
 
   const columns = [
     {
       label: 'User Name',
       field: 'name',
-      render: (row) => <Link href={`/dashboard/${row.id}`}>{row.name}</Link>,
+      render: (row) => (
+        <Link href={`/dashboard/${row.id}`} className="underline">
+          {row.name}
+        </Link>
+      ),
     },
     {
-      label: 'Name',
+      label: 'Real Name',
       field: 'real_name',
     },
-
     {
       label: 'Date of Birth',
       field: 'dob',
-      render: (row) => formatBirthDate(row.dob),
+      render: (row) => <p>{formatBirthDate(row.dob)}</p>,
     },
     {
       label: 'Action',
@@ -62,12 +83,16 @@ const Page = async () => {
         img="/system_images/users-banner.png"
         value={data.length}
       />
+
+      {/* CENTERED SEARCH BOX */}
       <div className="flex items-center justify-center w-full my-2">
-        <SearchBox />
+        <SearchBox
+          placeholder="Search users..."
+          onSearch={(value) => fetchUsers(value)}
+        />
       </div>
-      <div>
-        <ReuseableTable columns={columns} data={data} rowKey="id" />
-      </div>
+
+      <ReuseableTable columns={columns} data={data} rowKey="id" />
     </div>
   )
 }

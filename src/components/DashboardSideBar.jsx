@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const DashboardSideBar = () => {
   return (
-    <div className="bg-white fixed top-0 bottom-0 w-[240px] shadow-md px-[24px] py-[24px] flex flex-col justify-between ">
+    <div className="bg-white fixed top-0 bottom-0 w-[240px] shadow-md px-[24px] py-[24px] flex flex-col justify-between z-50">
       <div className="flex flex-col">
         <h1 className="text-[32px] font-bold">Tarot</h1>
         <span className="font-bold">Admin Dashbaord</span>

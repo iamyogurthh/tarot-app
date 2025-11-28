@@ -17,7 +17,7 @@ export default function ReuseableTable({ columns, data, rowKey }) {
           {data?.map((row, rowIndex) => (
             <tr key={row[rowKey] || rowIndex} className="even:bg-[#9799f53f]">
               {columns.map((col, colIndex) => (
-                <td key={colIndex} className="pl-4 pr-[80px] py-2 align-top">
+                <td key={colIndex} className="pl-4 pr-[80px] py-2 align-top ">
                   {col.render ? col.render(row) : row[col.field]}
                 </td>
               ))}

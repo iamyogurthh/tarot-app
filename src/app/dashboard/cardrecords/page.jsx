@@ -11,10 +11,12 @@ const Page = () => {
   const [cardData, setCardData] = useState([])
   const [loading, setLoading] = useState(false)
 
-  // Fetch all cards
-  const fetchCards = async () => {
+  // Fetch cards (with optional search)
+  const fetchCards = async (search = '') => {
     try {
-      const res = await fetch(`http://localhost:3000/api/cards`)
+      const res = await fetch(
+        `http://localhost:3000/api/cards?keyword=${search}`
+      )
       if (!res.ok) throw new Error('Failed to fetch cards')
       const data = await res.json()
       setCardData(data)
@@ -23,21 +25,24 @@ const Page = () => {
     }
   }
 
+  // Load all cards on mount
   useEffect(() => {
     fetchCards()
   }, [])
 
-  // Delete card
+  // Delete a card
   const handleDeleteCard = async (id) => {
     if (!confirm('Are you sure you want to delete this card?')) return
+
     try {
       setLoading(true)
       const res = await fetch(`http://localhost:3000/api/cards/${id}`, {
         method: 'DELETE',
       })
+
       if (!res.ok) throw new Error('Failed to delete card')
+
       alert('Card deleted successfully')
-      // Refresh card data
       fetchCards()
     } catch (error) {
       console.error(error)
@@ -49,6 +54,7 @@ const Page = () => {
 
   const columns = [
     { label: 'No', render: (row) => <span>{row.id}</span> },
+
     {
       label: 'Card Image',
       field: 'image',
@@ -66,18 +72,22 @@ const Page = () => {
         </Link>
       ),
     },
+
     {
       label: 'Card Name',
       field: 'name',
     },
+
     {
       label: 'Zodiac Sign',
       field: 'zodiac',
     },
+
     {
       label: 'Numerology Value',
       field: 'numerology',
     },
+
     {
       label: 'Action',
       field: 'id',
@@ -89,12 +99,14 @@ const Page = () => {
           >
             View Detail
           </Link>
+
           <Link
-            href={`http://localhost:3000/dashboard/cardrecords/editCard?id=${row.id}`}
+            href={`/dashboard/cardrecords/editCard?id=${row.id}`}
             className="underline font-semibold hover:text-[#9798F5]"
           >
             Edit Card
           </Link>
+
           <button onClick={() => handleDeleteCard(row.id)}>
             <Image
               src={'/system_images/trash.png'}
@@ -116,8 +128,13 @@ const Page = () => {
         img={'/system_images/tarots.png'}
         value={cardData.length}
       />
+
       <div className="flex items-center justify-between w-full mt-[8px] mb-[8px]">
-        <SearchBox />
+        <SearchBox
+          placeholder="Type to search cards"
+          onSearch={(value) => fetchCards(value)}
+        />
+
         <Link
           href={'/dashboard/cardrecords/addNewCard'}
           className="primary_btn"
@@ -125,6 +142,7 @@ const Page = () => {
           Add New Tarot Card
         </Link>
       </div>
+
       <div>
         <ReuseableTable columns={columns} data={cardData} rowKey="id" />
       </div>
