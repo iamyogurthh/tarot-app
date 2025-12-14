@@ -1,7 +1,6 @@
 export function formatDateTime(isoString) {
   const date = new Date(isoString)
   return date.toLocaleString('en-US', {
-    timeZone: 'UTC',
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -15,7 +14,6 @@ export const formatBirthDate = (isoString) => {
 
   const date = new Date(isoString)
   return date.toLocaleDateString('en-GB', {
-    timeZone: 'UTC',
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
