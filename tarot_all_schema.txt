@@ -1895,7 +1895,7 @@ INSERT INTO meanings (card_id, category_id, question_id, question_answer) VALUES
 (66, 4, 23, 'တန်းဖော်တွေနဲ့ပြင်ဆင်မယ်ဆိုရင် အောင်မြင်နိုင်တယ်။'),
 (66, 4, 24, 'Group achievements, portfolio, teamwork အပေါ်မူတည်ပြီး လက်ခံနိုင်ပါတယ်။');
 
-INSERT INTO cards (id, name, zodiac, numerology, image) VALUES (67, 'Four of Pentacles', 'Capricorn', '4', '');
+INSERT INTO cards (id, name, zodiac, numerology, image) VALUES (67, 'Four of Pentacles', 'Capricorn', '4', 'fop.jpg');
 INSERT INTO meanings (card_id, category_id, question_id, question_answer) VALUES
 (67, 1, 1, 'ကိုယ့်ရှိသည့်အရာတွေကို ထိန်းသိမ်းဖို့ အလွန်အင်ကိုကြိုးစားနေပြီး မည်သည့်အရာမပျက်စီးစေချင်တဲ့စိတ်ရှိတတ်ပါတယ်။'),
 (67, 1, 2, 'တည်ငြိမ်မှု၊ ငွေကြေးအာမခံမှု၊ ကိုယ်ပိုင်ပိုင်ဆိုင်မှုတွေအပေါ် အာမခံမှုရဖို့လိုနေပါတယ်။'),

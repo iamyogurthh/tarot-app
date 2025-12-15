@@ -8,7 +8,7 @@ export default function Home() {
       {/* Top-right History Button */}
       <div className="flex justify-end">
         <Link
-          href="/dashboard"
+          href="/adminlogin"
           className="bg-[#9799f543] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg text-dark_p"
         >
           Dashboard
