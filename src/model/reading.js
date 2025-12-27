@@ -38,7 +38,7 @@ export async function insertCards(readingId, cardId, questionId, meaningId) {
 
 export async function getUsersList() {
   const [users] = await pool.query(`
-        select * from users
+        select * from users where role != 'admin'
         `)
   return users
 }
@@ -126,9 +126,6 @@ export async function getReadingResultsByReadingId(id) {
 }
 
 export async function deleteReadingUserByReadingId(id) {
-  const [result] = await pool.query(
-      `DELETE FROM readings WHERE id = ?`,
-      [id]
-  );
-  return result.affectedRows > 0;
+  const [result] = await pool.query(`DELETE FROM readings WHERE id = ?`, [id])
+  return result.affectedRows > 0
 }

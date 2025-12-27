@@ -1,32 +1,48 @@
 'use client'
+
+import { adminLogin } from '@/actions/adminLogin'
 import BackBt from '@/components/BackBt'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const AdminLoginPage = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
 
   // Handler for input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    if (name === 'username') {
-      setUsername(value)
-    } else if (name === 'password') {
-      setPassword(value)
-    }
+    if (name === 'username') setUsername(value)
+    if (name === 'password') setPassword(value)
   }
 
-  // Handler for form submission
-  const handleSubmit = (e) => {
+  // ✅ Use server action here
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
-    // Basic Client-Side Validation
     if (!username || !password) {
       setError('Both username and password are required.')
       return
     }
+
+    setLoading(true)
+
+    const result = await adminLogin(username, password)
+
+    setLoading(false)
+
+    if (result?.error) {
+      setError(result.error)
+      return
+    }
+
+    // ✅ Login success
+    router.push('/dashboard')
   }
 
   return (
@@ -36,78 +52,50 @@ const AdminLoginPage = () => {
       </div>
 
       <div className="flex flex-col items-center justify-center mt-40">
-        {/* Login Box: Shadow, rounded corners, white background */}
         <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-2xl">
-          <h2 className="text-3xl font-extrabold text-center text-gray-900 flex items-center justify-center">
+          <h2 className="text-3xl font-extrabold text-center text-gray-900">
             Admin Sign In
           </h2>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            {/* Username Input Field */}
             <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700"
-              >
+              <label className="block text-sm font-medium text-gray-700">
                 Username
               </label>
-              <div className="mt-1">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  autoComplete="username"
-                  required
-                  value={username}
-                  onChange={handleInputChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder="Enter your username"
-                />
-              </div>
+              <input
+                name="username"
+                value={username}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-md"
+              />
             </div>
 
-            {/* Password Input Field */}
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
+              <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={handleInputChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder="Enter your password"
-                />
-              </div>
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-md"
+              />
             </div>
 
-            {/* Error Message Display */}
             {error && (
-              <div
-                className="p-2 text-sm text-red-700 bg-red-100 rounded-lg text-center"
-                role="alert"
-              >
+              <div className="p-2 text-sm text-red-700 bg-red-100 rounded text-center">
                 {error}
               </div>
             )}
 
-            {/* Submit Button */}
-            <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium primary_btn focus:outline-none focus:ring-2 focus:ring-offset-2  transition duration-150 ease-in-out "
-              >
-                Sign In
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-2 primary_btn"
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
           </form>
         </div>
       </div>

@@ -1,24 +1,37 @@
+'use client'
+
 import React from 'react'
 import DashboardSideBarItem from './DashboardSideBarItem'
-import Link from 'next/link'
+import { adminLogout } from '@/actions/adminLogout'
+import { useRouter } from 'next/navigation'
 
 const DashboardSideBar = () => {
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await adminLogout()
+    router.push('/')
+  }
+
   return (
     <div className="bg-white fixed top-0 bottom-0 w-[240px] shadow-md px-[24px] py-[24px] flex flex-col justify-between z-50">
       <div className="flex flex-col">
         <h1 className="text-[32px] font-bold">Tarot</h1>
-        <span className="font-bold">Admin Dashbaord</span>
-        <span className="border-[#D1D1D1] border-1 mt-[24px] mb-[16px] "></span>
+        <span className="font-bold">Admin Dashboard</span>
+        <span className="border-[#D1D1D1] border-1 mt-[24px] mb-[16px]" />
         <DashboardSideBarItem />
       </div>
+
       <div className="flex flex-col">
-        <span className="border-[#D1D1D1] border-1 mt-[24px] mb-[16px] "></span>
-        <Link
-          href={'/'}
+        <span className="border-[#D1D1D1] border-1 mt-[24px] mb-[16px]" />
+
+        {/* Logout + redirect */}
+        <button
+          onClick={handleLogout}
           className="text-center border-[#9798F5] border-2 shadow-md py-[10px] rounded-[8px] hover:bg-[#9798F5] hover:text-white cursor-pointer"
         >
           Back To Main Menu
-        </Link>
+        </button>
       </div>
     </div>
   )

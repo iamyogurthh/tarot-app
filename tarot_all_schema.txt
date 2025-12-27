@@ -6,7 +6,9 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     real_name VARCHAR(150),
-    dob DATETIME
+    dob DATETIME,
+    role VARCHAR(20),
+    password VARCHAR(100)
 );
 
 CREATE TABLE categories (
@@ -72,10 +74,12 @@ CREATE TABLE reading_results (
     FOREIGN KEY (meaning_id) REFERENCES meanings(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (id, name, real_name, dob) VALUES
-(1, 'alex', 'alexjohn', '2022-2-2'),
-(2, 'emma', 'emmasmith','2022-2-2'),
-(3, 'ryan', 'ryanlee', '2022-2-2' );
+
+INSERT INTO users (id, name, real_name, dob, role, password) VALUES
+(1, 'alex', 'alexjohn', '2022-2-2', 'user', ''),
+(2, 'emma', 'emmasmith','2022-2-2', 'user', ''),
+(3, 'ryan', 'ryanlee', '2022-2-2', 'user', '' ),
+(4, 'admin', 'administartor', '2025-11-11', 'admin', 'password123' );
 
 INSERT INTO categories (id, name, image) VALUES
 (1, 'general','general.jpg'),

@@ -4,26 +4,29 @@ export async function getAllUsers() {
   const [users] = await pool.query(
     `
     select * from users
-    `)
-  return users;
+    `
+  )
+  return users
 }
 
 export async function getUsersBySearchQuery(keyword) {
-  const search = `%${keyword}%`;
+  const search = `%${keyword}%`
 
   const [users] = await pool.query(
     `
     SELECT *
     FROM users
-    WHERE name LIKE ? 
-       OR real_name LIKE ?
+    WHERE role != 'admin'
+      AND (
+        name LIKE ?
+        OR real_name LIKE ?
+      )
     `,
     [search, search]
-  );
+  )
 
-  return users;
+  return users
 }
-
 
 export async function createUser(user_name, full_name, dob) {
   const [result] = await pool.query(
@@ -60,9 +63,6 @@ export async function getUserById(id) {
 }
 
 export async function deleteUserById(id) {
-  const [result] = await pool.query(
-      `DELETE FROM users WHERE id = ?`,
-      [id]
-  );
-  return result.affectedRows > 0;
+  const [result] = await pool.query(`DELETE FROM users WHERE id = ?`, [id])
+  return result.affectedRows > 0
 }

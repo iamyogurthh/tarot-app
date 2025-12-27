@@ -118,7 +118,9 @@ const Readings = () => {
               </tr>
               <tr>
                 <td className="pr-[8px] pb-[8px]">Major:</td>
-                <td className="pb-[8px]">{formData.major}</td>
+                <td className="pb-[8px] break-words w-auto max-w-[200px]">
+                  {formData.major}
+                </td>
               </tr>
             </tbody>
           </table>
