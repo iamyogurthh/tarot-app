@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { formatBirthDate, formatDateTime } from '@/utils/utils.client'
 import BackBt from '@/components/BackBt'
 import FullScreenLoader from '@/components/FullScreenLoader'
+import PrintReadingSinglePage from '@/components/PrintReadingA4'
 
 const Readings = ({ params }) => {
   const resolvedParams = React.use(params)
@@ -75,10 +76,21 @@ const Readings = ({ params }) => {
 
   return (
     <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
+      {/* PRINT ONLY (hidden on screen) */}
+      <div id="print-area">
+        <PrintReadingSinglePage userData={userData} cardList={cardList} />
+      </div>
+
       {/* Back Button */}
       <div className="absolute top-4 left-4">
         <BackBt />
       </div>
+      <button
+        onClick={() => window.print()}
+        className="fixed top-4 right-6 bg-[#9799f577] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg"
+      >
+        Print
+      </button>
 
       {/* User Info Section */}
       <div className="flex pt-[16px] items-center justify-start flex-wrap gap-4">

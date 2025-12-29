@@ -6,12 +6,15 @@ import { useForm } from '@/context/FormContext'
 import Image from 'next/image'
 import MainMenuBtn from '@/components/MainMenuBtn'
 import { useRouter } from 'next/navigation'
+import PrintReadingSinglePageContext from '@/components/PrintReadingSinglePageContext'
 
 const Readings = () => {
   const { userSelectedTarotData } = useTarot()
   const { formData } = useForm()
   const [position, setPosition] = useState(0) // which selected card position we are on
   const router = useRouter()
+
+  const cardList = userSelectedTarotData || []
 
   // Redirect if missing data
   useEffect(() => {
@@ -77,10 +80,49 @@ const Readings = () => {
 
   const atFirst = position === 0
   const atLast = position === Math.max(totalCards - 1, 0)
+  const userData = {
+    real_name: formData.full_name,
+    zodiac: formData.zodiac,
+    major: formData.major,
+    topic: formData.topic,
+    read_at: new Date(), // or any saved date
+  }
+
+  const selectedQuestionsIndex = cardList.map((card, idx) => {
+    const questions = card[topic] || []
+
+    // pick the same index as card position
+    let q = questions[idx]
+
+    // fallback to question_id = 19 + idx
+    if (!q) q = questions.find((q) => q.question_id === 19 + idx)
+
+    // fallback to first question
+    if (!q) q = questions[0]
+
+    // return the index of this selected question inside questions array
+    return questions.indexOf(q)
+  })
 
   return (
     <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
+      {/* PRINT ONLY (hidden on screen) */}
+      <div id="print-area">
+        <PrintReadingSinglePageContext
+          userData={userData}
+          cardList={cardList}
+          selectedQuestionsIndex={selectedQuestionsIndex}
+        />
+      </div>
+
       <MainMenuBtn />
+
+      <button
+        onClick={() => window.print()}
+        className="fixed top-4 right-6 bg-[#9799f577] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg"
+      >
+        Print
+      </button>
 
       {/* User Info Section (kept the same as your original) */}
       <div className="flex pt-[16px] items-center justify-start flex-wrap gap-4">

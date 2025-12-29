@@ -119,3 +119,92 @@ body {
 .primary_btn {
   @apply cursor-pointer bg-[#9799f577] px-[32px] py-[8px] rounded-[24px] font-semibold shadow-lg text-[var(--text-color)];
 }
+
+/* ---------------- PRINT SETUP ---------------- */
+
+/* Hide print area on screen */
+#print-area {
+  display: none;
+}
+
+/* A4 print rules */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+
+  #print-area {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 210mm;
+    height: 297mm; /* 🔴 FIXED height */
+    padding: 12mm; /* 🔴 smaller padding */
+    background: white;
+
+    overflow: hidden; /* 🔴 prevent overflow */
+    box-sizing: border-box;
+  }
+
+  .print-a4 {
+    font-size: 11pt; /* 🔴 smaller text */
+    line-height: 1.35; /* 🔴 tighter line spacing */
+
+    font-family: 'Myanmar Text', 'Padauk', Arial, sans-serif;
+  }
+
+  .title {
+    text-align: center;
+    font-size: 18pt; /* 🔴 slightly smaller */
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .user-info p {
+    margin: 2px 0;
+  }
+
+  hr {
+    margin: 8px 0;
+  }
+
+  .answer-block {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+
+    page-break-inside: avoid;
+    align-items: flex-start;
+  }
+
+  /* HARD LIMIT IMAGE SIZE */
+  .answer-block img {
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border: 1px solid #000;
+  }
+
+  .card-title {
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+
+  .answer {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .answer-row {
+    display: flex;
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
+}
