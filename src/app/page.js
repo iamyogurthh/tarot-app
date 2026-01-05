@@ -20,11 +20,11 @@ export default function Home() {
         <Image
           src="/logo.png"
           alt="logo"
-          width={241}
-          height={139}
+          width={251} // 241
+          height={149} //139
           className="object-cover mb-[16px] animate-float"
         />
-        <div className="animate-fade-in-up mb-[16px] bg-white px-[48px] py-[8px] rounded-[16px] shadow-lg border-[#9798F5] border-2 text-[#654597] font-bold">
+        <div className="text-2xl animate-fade-in-up mb-[16px] bg-white px-[48px] py-[8px] rounded-[16px] shadow-lg border-[#9798F5] border-2 text-[#654597] font-bold">
           Login
         </div>
         <UserInputForm />

@@ -54,7 +54,7 @@ export default function PrintReadingSinglePageContext({
                   {cardIndex + 1}. {card.name}
                 </div>
                 {qa.question_text && (
-                  <div className="question">{qa.question_text}</div>
+                  <div className="question font-bold">{qa.question_text}</div>
                 )}
                 <div className="answer">{qa.question_answer || ''}</div>
               </div>

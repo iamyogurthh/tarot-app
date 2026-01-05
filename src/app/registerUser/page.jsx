@@ -8,7 +8,7 @@ export default function RegisterUser() {
       {/* Top-right History Button */}
       <div className="flex justify-end">
         <Link
-          href="/dashboard"
+          href="/adminlogin"
           className="bg-[#9799f543] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg text-dark_p"
         >
           Dashboard
@@ -20,11 +20,11 @@ export default function RegisterUser() {
         <Image
           src="/logo.png"
           alt="logo"
-          width={241}
-          height={139}
+          width={251}
+          height={149}
           className="object-cover mb-[16px] animate-float"
         />
-        <div className="animate-fade-in-up mb-[16px] bg-white px-[48px] py-[8px] rounded-[16px] shadow-lg border-[#9798F5] border-2 text-[#654597] font-bold">
+        <div className="text-2xl animate-fade-in-up mb-[16px] bg-white px-[48px] py-[8px] rounded-[16px] shadow-lg border-[#9798F5] border-2 text-[#654597] font-bold">
           Register New User
         </div>
         <UserRegisterForm />

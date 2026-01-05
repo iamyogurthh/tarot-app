@@ -1,3 +1,4 @@
+//We are using this component
 'use client'
 import React from 'react'
 import Image from 'next/image'
@@ -55,7 +56,7 @@ export default function PrintReadingSinglePage({ userData, cardList }) {
 
                 {/*Question */}
                 {qa?.question_text && (
-                  <div className="question">{qa.question_text}</div>
+                  <div className="question font-bold">{qa.question_text}</div>
                 )}
 
                 {/* Answer */}

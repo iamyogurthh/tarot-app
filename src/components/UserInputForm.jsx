@@ -89,7 +89,7 @@ const UserInputForm = () => {
       <form onSubmit={handleSubmit} className="animate-fade-in-up">
         {/*User Name */}
         <div className="fade-in-up fade-delay-1 mb-[16px]">
-          <label htmlFor="user_name" className="font-bold text-dark_p">
+          <label htmlFor="user_name" className="font-bold text-dark_p text-xl">
             User Name (@username...)
           </label>
           <br />
@@ -106,7 +106,7 @@ const UserInputForm = () => {
 
         {/*Full Name */}
         <div className="fade-in-up fade-delay-1 mb-[16px]">
-          <label htmlFor="full_name" className="font-bold text-dark_p">
+          <label htmlFor="full_name" className="font-bold text-dark_p text-xl">
             User Full Name
           </label>
           <br />
@@ -123,7 +123,7 @@ const UserInputForm = () => {
 
         {/* Date of Birth */}
         <div className="fade-in-up fade-delay-2 mb-[16px]">
-          <label htmlFor="dob" className="font-bold text-dark_p">
+          <label htmlFor="dob" className="font-bold text-dark_p text-xl">
             Date of Birth
           </label>
           <br />
@@ -139,7 +139,7 @@ const UserInputForm = () => {
 
         {/* Major selection */}
         <div className="fade-in-up fade-delay-3 mb-[40px]">
-          <label htmlFor="major" className="font-bold text-dark_p">
+          <label htmlFor="major" className="font-bold text-dark_p text-xl">
             Major
           </label>
           <br />
@@ -165,7 +165,7 @@ const UserInputForm = () => {
         <div className="fade-in-up fade-delay-4 flex justify-center">
           <button
             type="submit"
-            className="cursor-pointer px-[32px] py-[10px] rounded-[24px] font-bold text-dark_p border-2 border-[#9798F5] bg-gradient-to-r from-[#cbccfa] to-[#9798f5] shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:brightness-110"
+            className="text-xl cursor-pointer px-[32px] py-[10px] rounded-[24px] font-bold text-dark_p border-2 border-[#9798F5] bg-gradient-to-r from-[#cbccfa] to-[#9798f5] shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:brightness-110"
           >
             Let's Start
           </button>
@@ -173,7 +173,7 @@ const UserInputForm = () => {
         <div className="flex items-center justify-center animate-fade-in-up fade-delay-5">
           <Link
             href={'/registerUser'}
-            className="items-center underline font-bold mt-[16px] text-[#654597] hover:text-white"
+            className="items-center underline font-bold mt-[16px] text-[#654597] hover:text-white text-lg"
           >
             Don’t have an account? Register
           </Link>

@@ -179,10 +179,10 @@ const Readings = ({ params }) => {
 
             {/* Meaning */}
             <div className="flex-1 text-center md:text-left space-y-4">
-              <h3 className="text-base sm:text-[24px] font-semibold text-black leading-relaxed">
+              <h3 className="text-3xl font-semibold text-black leading-relaxed tracking-wide">
                 {currentQuestion?.question_text || 'မေးခွန်းမရှိပါ။'}
               </h3>
-              <p className="text-sm sm:text-base text-black/80 leading-relaxed">
+              <p className="text-2xl tracking-wide text-black/80 leading-relaxed">
                 {currentQuestion?.question_answer || 'အဖြေမရှိသေးပါ။'}
               </p>
             </div>

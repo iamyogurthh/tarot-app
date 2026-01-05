@@ -87,7 +87,7 @@ const ChooseTopicPage = () => {
             </div>
 
             {/* Label */}
-            <div className="bg-white text-center py-2 mt-3 rounded-[24px] border-2 shadow-md border-[#9798F5] text-dark_p font-bold text-lg">
+            <div className="bg-white  text-xl text-center py-2 mt-3 rounded-[24px] border-2 shadow-md border-[#9798F5] text-dark_p font-bold">
               {cat.name}
             </div>
           </div>

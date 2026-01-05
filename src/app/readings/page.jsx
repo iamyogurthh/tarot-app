@@ -211,10 +211,10 @@ const Readings = () => {
 
             {/* Meaning Section */}
             <div className="flex-1 text-center md:text-left space-y-4">
-              <h3 className="text-base sm:text-[24px] font-semibold text-black leading-relaxed">
+              <h3 className="font-semibold text-black leading-relaxed text-3xl tracking-wide">
                 {currentQuestion?.question_text || 'မေးခွန်းမရှိပါ။'}
               </h3>
-              <p className="text-sm sm:text-base text-black/80 leading-relaxed">
+              <p className="text-2xl text-black/80 leading-relaxed tracking-wide">
                 {currentQuestion?.question_answer || 'အဖြေမရှိသေးပါ။'}
               </p>
             </div>
