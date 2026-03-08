@@ -1,59 +1,54 @@
-'use client'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import { useForm } from '@/context/FormContext'
-import Link from 'next/link'
-import FullScreenLoader from './FullScreenLoader'
+'use client';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { useForm } from '@/context/FormContext';
+import Link from 'next/link';
+import FullScreenLoader from './FullScreenLoader';
 
-const UserRegisterForm = () => {
-  const router = useRouter()
-  const { formData, updateField, clearForm } = useForm()
-  const [isLoading, setIsLoading] = useState(false)
+const UserRegisterForm = ({ setIsLoading }) => {
+  const router = useRouter();
+  const { formData, updateField, clearForm } = useForm();
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    updateField(name, value)
-  }
-
-  console.log(formData)
+    const { name, value } = e.target;
+    updateField(name, value);
+  };
 
   async function handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
     if (!formData.user_name || !formData.full_name || !formData.dob) {
-      alert('Please fill out all fields.')
-      return
+      alert('Please fill out all fields.');
+      return;
     }
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const formDataToSend = new FormData()
-      formDataToSend.append('user_name', formData.user_name)
-      formDataToSend.append('real_name', formData.full_name)
-      formDataToSend.append('dob', formData.dob)
+      const formDataToSend = new FormData();
+      formDataToSend.append('user_name', formData.user_name);
+      formDataToSend.append('real_name', formData.full_name);
+      formDataToSend.append('dob', formData.dob);
 
       const req = await fetch('http://localhost:3000/api/register', {
         method: 'POST',
         body: formDataToSend,
-      })
-      const data = await req.json()
+      });
+      const data = await req.json();
 
       if (!req.ok) {
-        alert(data.message || 'User registration failed')
-        return
+        alert(data.message || 'User registration failed');
+        return;
       }
 
-      alert('User Registered Successfully')
-      clearForm()
-      router.push('/')
+      alert('User Registered Successfully');
+      clearForm();
+      router.push('/');
     } catch (error) {
-      console.error(error)
-      alert('Registration failed. Please try again.')
+      console.error(error);
+      alert('Registration failed. Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
-
-  if (isLoading) return <FullScreenLoader />
 
   return (
     <>
@@ -127,7 +122,7 @@ const UserRegisterForm = () => {
         </div>
       </form>
     </>
-  )
-}
+  );
+};
 
-export default UserRegisterForm
+export default UserRegisterForm;

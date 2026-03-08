@@ -1,100 +1,101 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useForm } from '@/context/FormContext'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useTarot } from '@/context/TarotContext'
-import MainMenuBtn from '@/components/MainMenuBtn'
-import { useRouter } from 'next/navigation'
+'use client';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useForm } from '@/context/FormContext';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useTarot } from '@/context/TarotContext';
+import MainMenuBtn from '@/components/MainMenuBtn';
+import { useRouter } from 'next/navigation';
 
-const cardCount = 10
-const maxSelection = 6
+const cardCount = 10;
+const maxSelection = 6;
 
 const CardSelection = () => {
-  const [cardsToShow, setCardsToShow] = useState([]) // Cards displayed on screen (10 cards)
-  const [selectedCardIds, setSelectedCardIds] = useState([]) // Cards user actively selects (starts empty)
-  const { clearForm, formData } = useForm()
+  const [cardsToShow, setCardsToShow] = useState([]); // Cards displayed on screen (10 cards)
+  const [selectedCardIds, setSelectedCardIds] = useState([]); // Cards user actively selects (starts empty)
+  const { clearForm, formData } = useForm();
   const {
     setUserSelectedTarotData,
     tarotsForSelection,
     userSelectedTarotData,
-  } = useTarot()
-  const router = useRouter()
+  } = useTarot();
 
-  console.log('Selected cards are: ', selectedCardIds)
-  console.log('tarotsForSelection are: ', userSelectedTarotData)
-
-  const { cards } = tarotsForSelection
+  const router = useRouter();
+  const { cards } = tarotsForSelection;
 
   useEffect(() => {
     if (cards && cards.length > 0) {
-      setCardsToShow(cards.slice(0, cardCount)) // only show 10
+      setCardsToShow(cards.slice(0, cardCount)); // only show 10
     }
-  }, [cards])
+  }, [cards]);
 
   const handleCardClick = (index) => {
-    const isSelected = selectedCardIds.includes(index)
+    const isSelected = selectedCardIds.includes(index);
 
     if (isSelected) {
       // Unselect card
-      setSelectedCardIds(selectedCardIds.filter((i) => i !== index))
+      setSelectedCardIds(selectedCardIds.filter((i) => i !== index));
     } else if (selectedCardIds.length < maxSelection) {
       // Select card (max 6)
-      setSelectedCardIds([...selectedCardIds, index])
+      setSelectedCardIds([...selectedCardIds, index]);
     }
-  }
+  };
   const handleClick = async () => {
     try {
       // Map each selected card to the question corresponding to its position
       const dataArray = selectedCardIds
         .map((cardId, index) => {
-          const card = cards.find((c) => c.card_id === cardId)
-          const questionForPosition = card?.[formData.topic]?.[index] // pick question by position
+          const card = cards.find((c) => c.card_id === cardId);
+          const questionForPosition = card?.[formData.topic]?.[index]; // pick question by position
 
-          if (!questionForPosition) return null
+          if (!questionForPosition) return null;
 
           return {
             card_id: card.card_id,
             question_id: questionForPosition.question_id,
             meaning_id: questionForPosition.meaning_id,
-          }
+          };
         })
-        .filter(Boolean) // remove any nulls
+        .filter(Boolean); // remove any nulls
 
       const payload = {
         user_reading_id: tarotsForSelection.user_reading_id,
         topic: formData.topic,
         [formData.topic]: dataArray, // dynamic topic key
-      }
+      };
 
       const response = await fetch('/api/readings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      })
+      });
 
-      const result = await response.json()
+      const result = await response.json();
 
       if (response.ok) {
         // Store selected cards in context
         const selectedTarotCards = selectedCardIds.map((id) =>
-          cards.find((c) => c.card_id === id)
-        )
-        setUserSelectedTarotData(selectedTarotCards)
-        router.push('/readings')
+          cards.find((c) => c.card_id === id),
+        );
+        setUserSelectedTarotData(selectedTarotCards);
+        router.push('/readings');
       } else {
-        alert(result.message || 'Failed to save reading.')
+        alert(result.message || 'Failed to save reading.');
       }
     } catch (err) {
-      console.error(err)
-      alert('Error saving reading.')
+      console.error(err);
+      alert('Error saving reading.');
     }
-  }
+  };
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Back Button */}
       <MainMenuBtn />
+
+      <div className="text-center absolute top-[32px] left-0 right-0 text-2xl text-dark_p font-bold">
+        <p>သင်ကြိုက်နှစ်သက်ရာ ကဒ် ၆ ကဒ်တိတိ ‌ရွေးချယ်ပါ</p>
+      </div>
 
       {/* Grid Container */}
       <div
@@ -111,7 +112,7 @@ const CardSelection = () => {
         }}
       >
         {cardsToShow.map((card, i) => {
-          const isSelected = selectedCardIds.includes(card.card_id)
+          const isSelected = selectedCardIds.includes(card.card_id);
 
           return (
             <motion.div
@@ -153,7 +154,7 @@ const CardSelection = () => {
                 className="rounded-xl"
               />
             </motion.div>
-          )
+          );
         })}
       </div>
 
@@ -181,7 +182,7 @@ const CardSelection = () => {
         )}
       </AnimatePresence>
     </div>
-  )
-}
+  );
+};
 
-export default CardSelection
+export default CardSelection;

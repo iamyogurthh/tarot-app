@@ -1,6 +1,6 @@
-'use client'
-import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+'use client';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
 
 const EditQuestionModal = ({
   setIsEditModalOpen,
@@ -8,56 +8,56 @@ const EditQuestionModal = ({
   editingQuestion,
   onSuccess, // optional callback to refresh questions after update
 }) => {
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState('');
   const [questionText, setQuestionText] = useState(
-    editingQuestion.question_text
-  )
+    editingQuestion.question_text,
+  );
 
   // Fetch category info
   useEffect(() => {
     async function fetchCategory() {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/categories/${categoryId}`
-        )
-        if (!res.ok) throw new Error('Failed to fetch category')
-        const data = await res.json()
-        setCategory(data)
+          `http://localhost:3000/api/categories/${categoryId}`,
+        );
+        if (!res.ok) throw new Error('Failed to fetch category');
+        const data = await res.json();
+        setCategory(data);
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
     }
-    fetchCategory()
-  }, [categoryId])
+    fetchCategory();
+  }, [categoryId]);
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const formData = new FormData()
-      formData.append('category_id', categoryId)
-      formData.append('question_no', editingQuestion.question_no)
-      formData.append('question_text', questionText)
+      const formData = new FormData();
+      formData.append('category_id', categoryId);
+      formData.append('question_no', editingQuestion.question_no);
+      formData.append('question_text', questionText);
 
       const res = await fetch(
         `http://localhost:3000/api/questions/${editingQuestion.id}`,
         {
           method: 'PUT',
           body: formData,
-        }
-      )
-      if (!res.ok) throw new Error('Failed to update question')
+        },
+      );
+      if (!res.ok) throw new Error('Failed to update question');
 
-      const data = await res.json()
-      alert(data.message || 'Question updated successfully')
+      const data = await res.json();
+      alert(data.message || 'Question updated successfully');
 
-      if (onSuccess) onSuccess() // Refresh parent component's questions
-      setIsEditModalOpen(false)
+      if (onSuccess) onSuccess(); // Refresh parent component's questions
+      setIsEditModalOpen(false);
     } catch (err) {
-      console.error(err)
-      alert('Error updating question')
+      console.error(err);
+      alert('Error updating question');
     }
-  }
+  };
 
   return (
     <div className="bg-[#00000091] fixed inset-0 z-50 flex items-center justify-center p-10">
@@ -98,7 +98,7 @@ const EditQuestionModal = ({
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default EditQuestionModal
+export default EditQuestionModal;

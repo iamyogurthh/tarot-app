@@ -3,53 +3,56 @@ import {
   editCategory,
   getCategoryById,
   getCategoryByName,
-} from '@/model/category'
-import { getDataFromForm, handleImageEdit } from '@/utils/utils.server'
-import { NextResponse } from 'next/server'
+} from '@/model/category';
+import { getDataFromForm, handleImageEdit } from '@/utils/utils.server';
+import { NextResponse } from 'next/server';
 
 export async function GET(req, { params }) {
-  const { id } = await params
-  const category = await getCategoryById(id)
+  const { id } = await params;
+  const category = await getCategoryById(id);
   if (category) {
-    return Response.json(category)
+    return Response.json(category);
   }
-  return Response.json({ message: 'Category not found' }, { status: 400 })
+  return Response.json({ message: 'Category not found' }, { status: 400 });
 }
 
 export async function PUT(req, { params }) {
-  const { id } = await params
-  const formData = await req.formData()
-  let { name, image } = getDataFromForm(formData, 'name', 'image')
+  const { id } = await params;
+  const formData = await req.formData();
+  let { name, image } = getDataFromForm(formData, 'name', 'image');
 
-  const existingCategory = await getCategoryById(id)
+  const existingCategory = await getCategoryById(id);
   if (!existingCategory) {
-    return NextResponse.json({ message: 'Category not found' }, { status: 404 })
+    return NextResponse.json(
+      { message: 'Category not found' },
+      { status: 404 },
+    );
   }
 
-  const isExistingCategory = await getCategoryByName(name)
+  const isExistingCategory = await getCategoryByName(name);
   if (isExistingCategory) {
     return NextResponse.json(
       { message: 'Category already exists' },
-      { status: 400 }
-    )
+      { status: 400 },
+    );
   }
 
-  const finalImage = await handleImageEdit(image, existingCategory)
+  const finalImage = await handleImageEdit(image, existingCategory);
 
-  const isOk = await editCategory(id, name, finalImage)
+  const isOk = await editCategory(id, name, finalImage);
 
   if (isOk) {
-    return Response.json({ message: 'Successfully updated' })
+    return Response.json({ message: 'Successfully updated' });
   }
-  return Response.json({ message: 'Cannot update category' }, { status: 400 })
+  return Response.json({ message: 'Cannot update category' }, { status: 400 });
 }
 
 export async function DELETE(req, { params }) {
-  const { id } = await params
-  const isOk = await deleteCategory(id)
+  const { id } = await params;
+  const isOk = await deleteCategory(id);
 
   if (isOk) {
-    return Response.json({ message: 'Successfully deleted' })
+    return Response.json({ message: 'Successfully deleted' });
   }
-  return Response.json({ message: 'Cannot delete category' }, { status: 400 })
+  return Response.json({ message: 'Cannot delete category' }, { status: 400 });
 }

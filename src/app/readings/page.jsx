@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { useTarot } from '@/context/TarotContext'
-import { useForm } from '@/context/FormContext'
-import Image from 'next/image'
-import MainMenuBtn from '@/components/MainMenuBtn'
-import { useRouter } from 'next/navigation'
-import PrintReadingSinglePageContext from '@/components/PrintReadingSinglePageContext'
+import React, { useState, useEffect } from 'react';
+import { useTarot } from '@/context/TarotContext';
+import { useForm } from '@/context/FormContext';
+import Image from 'next/image';
+import MainMenuBtn from '@/components/MainMenuBtn';
+import { useRouter } from 'next/navigation';
+import PrintReadingSinglePageContext from '@/components/PrintReadingSinglePageContext';
 
 const Readings = () => {
-  const { userSelectedTarotData } = useTarot()
-  const { formData } = useForm()
-  const [position, setPosition] = useState(0) // which selected card position we are on
-  const router = useRouter()
+  const { userSelectedTarotData } = useTarot();
+  const { formData } = useForm();
+  const [position, setPosition] = useState(0); // which selected card position we are on
+  const router = useRouter();
 
-  const cardList = userSelectedTarotData || []
+  const cardList = userSelectedTarotData || [];
 
   // Redirect if missing data
   useEffect(() => {
@@ -25,84 +25,84 @@ const Readings = () => {
       !userSelectedTarotData ||
       userSelectedTarotData.length === 0
     ) {
-      router.push('/')
+      router.push('/');
     }
-  }, [formData, userSelectedTarotData, router])
+  }, [formData, userSelectedTarotData, router]);
 
-  const topic = formData.topic
-  const totalCards = userSelectedTarotData?.length || 0
+  const topic = formData.topic;
+  const totalCards = userSelectedTarotData?.length || 0;
 
   // clamp position so we never go out of bounds
   useEffect(() => {
-    if (position < 0 && totalCards > 0) setPosition(0)
-    if (position >= totalCards && totalCards > 0) setPosition(totalCards - 1)
-  }, [position, totalCards])
+    if (position < 0 && totalCards > 0) setPosition(0);
+    if (position >= totalCards && totalCards > 0) setPosition(totalCards - 1);
+  }, [position, totalCards]);
 
-  const currentCard = userSelectedTarotData?.[position]
-  const cardTopicArray = currentCard?.[topic] || []
+  const currentCard = userSelectedTarotData?.[position];
+  const cardTopicArray = currentCard?.[topic] || [];
 
   // *** key logic: pick the question at the SAME index as the card position ***
-  let currentQuestion = cardTopicArray?.[position]
+  let currentQuestion = cardTopicArray?.[position];
 
   // fallback: try to find question with question_id = 19 + position
   if (!currentQuestion) {
-    const possibleId = 19 + position
-    currentQuestion = cardTopicArray?.find((q) => q.question_id === possibleId)
+    const possibleId = 19 + position;
+    currentQuestion = cardTopicArray?.find((q) => q.question_id === possibleId);
   }
 
   // final fallback: first question of that card's topic
   if (!currentQuestion) {
-    currentQuestion = cardTopicArray?.[0] || {}
+    currentQuestion = cardTopicArray?.[0] || {};
   }
 
   // compute totalQuestions (for pagination dots) from the first card's topic length (or current card if you prefer)
   const totalQuestions =
-    userSelectedTarotData?.[0]?.[topic]?.length || cardTopicArray.length || 0
+    userSelectedTarotData?.[0]?.[topic]?.length || cardTopicArray.length || 0;
 
   // find index of currentQuestion inside this card's topic array (0..totalQuestions-1)
   let currentQuestionIndex = cardTopicArray.findIndex(
-    (q) => q === currentQuestion
-  )
-  if (currentQuestionIndex === -1) currentQuestionIndex = 0
+    (q) => q === currentQuestion,
+  );
+  if (currentQuestionIndex === -1) currentQuestionIndex = 0;
 
   // Navigation: move through cards; each step shows that card's question at the same index
   const handleNext = () => {
     if (position < totalCards - 1) {
-      setPosition((p) => p + 1)
+      setPosition((p) => p + 1);
     }
-  }
+  };
 
   const handlePrev = () => {
     if (position > 0) {
-      setPosition((p) => p - 1)
+      setPosition((p) => p - 1);
     }
-  }
+  };
 
-  const atFirst = position === 0
-  const atLast = position === Math.max(totalCards - 1, 0)
+  const atFirst = position === 0;
+  const atLast = position === Math.max(totalCards - 1, 0);
   const userData = {
     real_name: formData.full_name,
     zodiac: formData.zodiac,
     major: formData.major,
     topic: formData.topic,
     read_at: new Date(), // or any saved date
-  }
+  };
 
   const selectedQuestionsIndex = cardList.map((card, idx) => {
-    const questions = card[topic] || []
+    const questions = card[topic] || [];
 
     // pick the same index as card position
-    let q = questions[idx]
+    let q = questions[idx];
 
     // fallback to question_id = 19 + idx
-    if (!q) q = questions.find((q) => q.question_id === 19 + idx)
+    if (!q) q = questions.find((q) => q.question_id === 19 + idx);
 
     // fallback to first question
-    if (!q) q = questions[0]
+    if (!q) q = questions[0];
 
     // return the index of this selected question inside questions array
-    return questions.indexOf(q)
-  })
+    return questions.indexOf(q);
+  });
 
   return (
     <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
@@ -119,7 +119,7 @@ const Readings = () => {
 
       <button
         onClick={() => window.print()}
-        className="fixed top-4 right-6 bg-[#9799f577] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg"
+        className="fixed top-4 right-6 bg-[#9799f577] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg text-dark_p"
       >
         Print
       </button>
@@ -261,7 +261,7 @@ const Readings = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Readings
+export default Readings;

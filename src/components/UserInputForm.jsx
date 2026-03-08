@@ -1,10 +1,9 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import { useForm } from '@/context/FormContext'
-import Link from 'next/link'
-import FullScreenLoader from './FullScreenLoader'
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { useForm } from '@/context/FormContext';
+import Link from 'next/link';
 
 const majors = [
   'Myanmar',
@@ -32,57 +31,53 @@ const majors = [
   'Sport Science',
   'Law',
   'other',
-]
+];
 
-const UserInputForm = () => {
-  const router = useRouter()
-  const { formData, updateField } = useForm()
-  console.log(formData)
-  const [isLoading, setIsLoading] = useState(false)
+const UserInputForm = ({ setIsLoading }) => {
+  const router = useRouter();
+  const { formData, updateField } = useForm();
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    updateField(name, value)
-  }
+    const { name, value } = e.target;
+    updateField(name, value);
+  };
 
   async function handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
     if (
       !formData.user_name ||
       !formData.full_name ||
       !formData.dob ||
       !formData.major
     ) {
-      alert('Please fill out all fields.')
-      return
+      alert('Please fill out all fields.');
+      return;
     }
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const formDataToSend = new FormData()
-      formDataToSend.append('user_name', formData.user_name)
+      const formDataToSend = new FormData();
+      formDataToSend.append('user_name', formData.user_name);
       const req = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         body: formDataToSend,
-      })
-      const data = await req.json()
+      });
+      const data = await req.json();
 
       if (!req.ok) {
-        alert(data.message || 'User Login failed')
-        return
+        alert(data.message || 'User Login failed');
+        return;
       }
-      const { user_id } = data
-      updateField('user_id', user_id)
-      router.push('/chooseTopic')
+      const { user_id } = data;
+      updateField('user_id', user_id);
+      router.push('/chooseTopic');
     } catch (error) {
-      console.error(error)
-      alert('User Login failed. Please try again.')
+      console.error(error);
+      alert('User Login failed. Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
-
-  if (isLoading) return <FullScreenLoader text="Logging in" />
 
   return (
     <>
@@ -180,7 +175,7 @@ const UserInputForm = () => {
         </div>
       </form>
     </>
-  )
-}
+  );
+};
 
-export default UserInputForm
+export default UserInputForm;

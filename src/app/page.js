@@ -1,8 +1,14 @@
-import UserInputForm from '@/components/UserInputForm'
-import Image from 'next/image'
-import Link from 'next/link'
+'use client';
+import FullScreenLoader from '@/components/FullScreenLoader';
+import UserInputForm from '@/components/UserInputForm';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (isLoading) return <FullScreenLoader text="ခေတ္တခဏစောင့်ဆိုင်းပေးပါ" />;
   return (
     <div className="relative min-h-screen p-[24px]">
       {/* Top-right History Button */}
@@ -14,9 +20,8 @@ export default function Home() {
           Dashboard
         </Link>
       </div>
-
       {/* Centered Content */}
-      <div className="absolute flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+      <div className="absolute z-10000 flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
         <Image
           src="/logo.png"
           alt="logo"
@@ -27,8 +32,37 @@ export default function Home() {
         <div className="text-2xl animate-fade-in-up mb-[16px] bg-white px-[48px] py-[8px] rounded-[16px] shadow-lg border-[#9798F5] border-2 text-[#654597] font-bold">
           Login
         </div>
-        <UserInputForm />
+        <UserInputForm setIsLoading={setIsLoading} />
+      </div>
+
+      {/*About us */}
+      <div className="animate-fade-in-up absolute bg-white border-[#9798f5] border-2 p-4 rounded-xl right-20 top-130">
+        <div className="absolute top-[-300px] left-30  animate-fade-in-up">
+          <Image src={'/major.png'} width={200} height={200} alt="major-logo" />
+        </div>
+        <p className=" mt-4 text-dark_p font-bold text-xl mb-4">
+          Developed by CS Second Year Honours - Group 1
+        </p>
+        <ul className="text-xl">
+          <li className="flex justify-between font-bold mb-3 text-red-500">
+            <div>Mg Sai Eain Khant</div> <div>ဒုဂုဏ်ကသ-၃</div>
+          </li>
+          <li className="flex justify-between mb-3 font-semibold text-green-500">
+            <div>Ma Thet Shwe Zin Kyaw</div> <div>ဒုဂုဏ်ကသ-၂</div>
+          </li>
+          <li className="flex justify-between mb-3 font-semibold text-orange-500">
+            <div>Ma Myat Hnin Yadanar</div>
+            <div>ဒုဂုဏ်ကသ-၆</div>
+          </li>
+          <li className="flex justify-between mb-3 font-semibold text-blue-500">
+            <div>Ma May Zin Htun</div> <div>ဒုဂုဏ်ကသ-၉</div>
+          </li>
+        </ul>
+      </div>
+
+      <div className="absolute top-[300px] left-[-100px] animate-float">
+        <Image src={'/cute.png'} width={900} height={900} alt="cute" />
       </div>
     </div>
-  )
+  );
 }

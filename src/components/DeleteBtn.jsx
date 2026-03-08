@@ -1,37 +1,36 @@
-'use client'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+'use client';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 const DeleteBtn = ({ endpoint, id, onSuccess, confirmText }) => {
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const handleDelete = async () => {
     const isConfirmed = window.confirm(
-      confirmText || 'Are you sure you want to delete this?'
-    )
-    if (!isConfirmed) return
+      confirmText || 'Are you sure you want to delete this?',
+    );
+    if (!isConfirmed) return;
 
     try {
-      setLoading(true)
-      const res = await fetch(`${endpoint}/${id}`, { method: 'DELETE' })
-      const data = await res.json()
-      console.log(id)
+      setLoading(true);
+      const res = await fetch(`${endpoint}/${id}`, { method: 'DELETE' });
+      const data = await res.json();
 
       if (res.ok) {
-        alert(data.message || 'Successfully deleted!')
-        if (onSuccess) onSuccess(id)
+        alert(data.message || 'Successfully deleted!');
+        if (onSuccess) onSuccess();
       } else {
-        alert(data.message || 'Failed to delete.')
+        alert(data.message || 'Failed to delete.');
       }
     } catch (err) {
-      console.error('Delete error:', err)
-      alert('Something went wrong. Please try again.')
+      console.error('Delete error:', err);
+      alert('Something went wrong. Please try again.');
     } finally {
-      setLoading(false)
-      router.refresh()
+      setLoading(false);
+      router.refresh();
     }
-  }
+  };
 
   return (
     <button
@@ -48,7 +47,7 @@ const DeleteBtn = ({ endpoint, id, onSuccess, confirmText }) => {
         height={27}
       />
     </button>
-  )
-}
+  );
+};
 
-export default DeleteBtn
+export default DeleteBtn;

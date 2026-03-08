@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React from 'react'
+import React from 'react';
 
 const FullScreenLoader = ({ text = 'Loading...' }) => {
   return (
@@ -11,7 +11,7 @@ const FullScreenLoader = ({ text = 'Loading...' }) => {
       {/* Optional text */}
       <p className="mt-4 text-white text-lg font-medium">{text}</p>
     </div>
-  )
-}
+  );
+};
 
-export default FullScreenLoader
+export default FullScreenLoader;

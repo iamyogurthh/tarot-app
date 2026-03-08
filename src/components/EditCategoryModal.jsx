@@ -1,70 +1,70 @@
-'use client'
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
+'use client';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 const EditCategoryModal = ({
   setIsEditCategoryOpen,
   categoryId,
   onSuccess,
 }) => {
-  const [categoryName, setCategoryName] = useState('')
-  const [categoryImage, setCategoryImage] = useState(null) // for new image preview
-  const [existingImage, setExistingImage] = useState('') // for current image URL
+  const [categoryName, setCategoryName] = useState('');
+  const [categoryImage, setCategoryImage] = useState(null); // for new image preview
+  const [existingImage, setExistingImage] = useState(''); // for current image URL
 
   // Fetch current category data
   useEffect(() => {
     async function fetchCategory() {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/categories/${categoryId}`
-        )
-        if (!res.ok) throw new Error('Failed to fetch category')
-        const data = await res.json()
-        setCategoryName(data.name)
-        setExistingImage(data.image) // assuming your API returns image path
+          `http://localhost:3000/api/categories/${categoryId}`,
+        );
+        if (!res.ok) throw new Error('Failed to fetch category');
+        const data = await res.json();
+        setCategoryName(data.name);
+        setExistingImage(data.image); // assuming your API returns image path
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
     }
-    fetchCategory()
-  }, [categoryId])
+    fetchCategory();
+  }, [categoryId]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const formData = new FormData()
-      formData.append('name', categoryName)
-      if (categoryImage) formData.append('image', categoryImage)
+      const formData = new FormData();
+      formData.append('name', categoryName);
+      if (categoryImage) formData.append('image', categoryImage);
 
       const res = await fetch(
         `http://localhost:3000/api/categories/${categoryId}`,
         {
           method: 'PUT',
           body: formData,
-        }
-      )
+        },
+      );
 
-      const data = await res.json()
+      const data = await res.json();
 
       // Handle duplicate name case
       if (res.status === 400 && data.message === 'Category already exists') {
-        alert('Category name already exists. Please use another name.')
-        return
+        alert('Category name already exists. Please use another name.');
+        return;
       }
 
       if (!res.ok) {
-        alert(data.message || 'Failed to update category')
-        return
+        alert(data.message || 'Failed to update category');
+        return;
       }
 
-      alert(data.message)
-      onSuccess()
-      setIsEditCategoryOpen(false)
+      alert(data.message);
+      onSuccess();
+      setIsEditCategoryOpen(false);
     } catch (err) {
-      console.error(err)
-      alert('Error updating category')
+      console.error(err);
+      alert('Error updating category');
     }
-  }
+  };
 
   return (
     <div className="bg-[#00000091] fixed top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center p-[40px]">
@@ -95,8 +95,8 @@ const EditCategoryModal = ({
                 categoryImage
                   ? URL.createObjectURL(categoryImage)
                   : existingImage
-                  ? `/tarot_images/${existingImage}`
-                  : '/system_images/tarot_card_back.png'
+                    ? `/tarot_images/${existingImage}`
+                    : '/system_images/tarot_card_back.png'
               }
               alt="Category Preview"
               className="w-[227px] h-[370px] object-cover rounded-lg"
@@ -132,7 +132,7 @@ const EditCategoryModal = ({
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default EditCategoryModal
+export default EditCategoryModal;

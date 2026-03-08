@@ -1,110 +1,102 @@
-import pool from "@/database/db";
-import { getQuestionsByCategoryId } from "./question";
-import { getCategoryIDByCategoryName } from "./category";
-import { getMeaningByQuestionIdAndCardId } from "./meaning";
+import pool from '@/database/db';
+import { getQuestionsByCategoryId } from './question';
+import { getCategoryIDByCategoryName } from './category';
+import { getMeaningByQuestionIdAndCardId } from './meaning';
 
 export async function getAllCards() {
-    const [rows] = await pool.query(`
+  const [rows] = await pool.query(`
     SELECT * FROM cards`);
-    return rows;
+  return rows;
 }
 
 export async function getCardsBySearchQuery(keyword) {
-    const search = `%${keyword}%`;
-  
-    const [cards] = await pool.query(
-      `
+  const search = `%${keyword}%`;
+
+  const [cards] = await pool.query(
+    `
       SELECT *
       FROM cards
       WHERE name LIKE ?
          OR zodiac LIKE ?
          OR numerology LIKE ?
       `,
-      [search, search, search]
-    );
-  
-    return cards;
-  }
-  
+    [search, search, search],
+  );
+
+  return cards;
+}
 
 export async function getCardById(id) {
-    const [card] = await pool.query(`
-    SELECT * FROM cards where id=?`, [id]);
-    return card[0];
+  const [card] = await pool.query(
+    `
+    SELECT * FROM cards where id=?`,
+    [id],
+  );
+  return card[0];
 }
 
-export async function createCard(name,zodiac,numerology,image=null){
-    const isOk = await pool.query(`
+export async function createCard(name, zodiac, numerology, image = null) {
+  const isOk = await pool.query(
+    `
     insert into cards (name,zodiac,numerology,image) values (?,?,?,?)
-    `,[name,zodiac,numerology,image]);
-    if(isOk){
-        return true;
-    }
-    return false;
-
+    `,
+    [name, zodiac, numerology, image],
+  );
+  if (isOk) {
+    return true;
+  }
+  return false;
 }
 
-export async function editCard(id, name, zodiac, numerology, image=null) {
-    const [result] = await pool.query(
-        `UPDATE cards 
+export async function editCard(id, name, zodiac, numerology, image = null) {
+  const [result] = await pool.query(
+    `UPDATE cards 
          SET name = ?, zodiac = ?, numerology = ?, image = ? 
          WHERE id = ?`,
-        [name, zodiac, numerology, image, id]
-    );
+    [name, zodiac, numerology, image, id],
+  );
 
-    return result.affectedRows > 0 ;
+  return result.affectedRows > 0;
 }
 
 export async function deleteCard(id) {
-    const [result] = await pool.query(
-        `DELETE FROM cards WHERE id = ?`,
-        [id]
-    );
-    return result.affectedRows > 0;
+  const [result] = await pool.query(`DELETE FROM cards WHERE id = ?`, [id]);
+  return result.affectedRows > 0;
 }
 
-
-
-
-
 export async function getCards(topic) {
-    let result = []
-    const categoryId = await getCategoryIDByCategoryName(topic);
-    const questions = await getQuestionsByCategoryId(categoryId);
-    const [cards] = await pool.query(`
+  let result = [];
+  const categoryId = await getCategoryIDByCategoryName(topic);
+  const questions = await getQuestionsByCategoryId(categoryId);
+  const [cards] = await pool.query(`
     SELECT * FROM cards
     ORDER BY RAND()
     LIMIT 10;
     `);
-    console.log(cards)
 
-    for (let i = 0; i < cards.length; i++) {
-        let loopResult = [];
-        let card = cards[i];
+  for (let i = 0; i < cards.length; i++) {
+    let loopResult = [];
+    let card = cards[i];
 
-        for (let j = 0; j < questions.length; j++) {
-            let question = questions[j];//id,question_text
-            let meaning = await getMeaningByQuestionIdAndCardId(question.id, card.id);//id,question_answer
-            loopResult.push({
-                question_id: question.id,
-                question_text: question.question_text,
-                meaning_id: meaning.id,
-                question_answer: meaning.question_answer
-            });
-
-        }
-        result.push(
-            {
-                card_id: card.id,
-                name: card.name,
-                zodiac: card.zodiac,
-                numerology: card.numerology,
-                image: card.image,
-                category: topic,
-                [topic]: loopResult
-            }
-        )
-
+    for (let j = 0; j < questions.length; j++) {
+      let question = questions[j]; //id,question_text
+      let meaning = await getMeaningByQuestionIdAndCardId(question.id, card.id); //id,question_answer
+      loopResult.push({
+        question_id: question.id,
+        question_text: question.question_text,
+        meaning_id: meaning.id,
+        question_answer: meaning.question_answer,
+      });
     }
-    return result;
+    result.push({
+      card_id: card.id,
+      name: card.name,
+      zodiac: card.zodiac,
+      numerology: card.numerology,
+      image: card.image,
+      category: topic,
+      [topic]: loopResult,
+    });
+  }
+  return result;
 }

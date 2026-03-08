@@ -1,48 +1,48 @@
-'use client'
-import React, { useState, useEffect } from 'react'
-import { use } from 'react'
-import { useTarot } from '@/context/TarotContext'
-import { useForm } from '@/context/FormContext'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { formatBirthDate, formatDateTime } from '@/utils/utils.client'
-import BackBt from '@/components/BackBt'
-import FullScreenLoader from '@/components/FullScreenLoader'
-import PrintReadingSinglePage from '@/components/PrintReadingA4'
+'use client';
+import React, { useState, useEffect } from 'react';
+import { use } from 'react';
+import { useTarot } from '@/context/TarotContext';
+import { useForm } from '@/context/FormContext';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { formatBirthDate, formatDateTime } from '@/utils/utils.client';
+import BackBt from '@/components/BackBt';
+import FullScreenLoader from '@/components/FullScreenLoader';
+import PrintReadingSinglePage from '@/components/PrintReadingA4';
 
 const Readings = ({ params }) => {
-  const resolvedParams = React.use(params)
-  const [user_id, reading_id] = resolvedParams.ids
+  const resolvedParams = React.use(params);
+  const [user_id, reading_id] = resolvedParams.ids;
 
-  const [userData, setUserData] = useState(null)
-  const [cardList, setCardList] = useState([])
-  const [error, setError] = useState(null)
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [userData, setUserData] = useState(null);
+  const [cardList, setCardList] = useState([]);
+  const [error, setError] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     //  Fetch API data
     async function fetchDataById(user_Id, reading_Id) {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/readings/${user_Id}/${reading_Id}`
-        )
-        if (!res.ok) throw new Error('Failed to fetch reading data')
-        const data = await res.json()
+          `http://localhost:3000/api/readings/${user_Id}/${reading_Id}`,
+        );
+        if (!res.ok) throw new Error('Failed to fetch reading data');
+        const data = await res.json();
 
         //  Assume API returns [userData, ...cards]
-        const [userInfo, ...cards] = data
-        setUserData(userInfo)
-        setCardList(cards)
+        const [userInfo, ...cards] = data;
+        setUserData(userInfo);
+        setCardList(cards);
       } catch (error) {
-        console.error(error)
-        setError(error.message)
+        console.error(error);
+        setError(error.message);
       }
     }
 
     if (user_id && reading_id) {
-      fetchDataById(user_id, reading_id)
+      fetchDataById(user_id, reading_id);
     }
-  }, [user_id, reading_id])
+  }, [user_id, reading_id]);
 
   //  Loading and error states
   if (error) {
@@ -50,29 +50,29 @@ const Readings = ({ params }) => {
       <div className="flex items-center justify-center min-h-screen text-lg font-semibold text-red-600">
         Error: {error}
       </div>
-    )
+    );
   }
 
   if (!userData) {
-    return <FullScreenLoader />
+    return <FullScreenLoader />;
   }
 
   //  Card navigation
   const handleNext = () => {
     if (currentIndex < cardList.length - 1) {
-      setCurrentIndex(currentIndex + 1)
+      setCurrentIndex(currentIndex + 1);
     }
-  }
+  };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1)
+      setCurrentIndex(currentIndex - 1);
     }
-  }
+  };
 
-  const card = cardList[currentIndex]
-  const topic = userData.topic || 'love'
-  const currentQuestion = card?.[topic] || {}
+  const card = cardList[currentIndex];
+  const topic = userData.topic || 'love';
+  const currentQuestion = card?.[topic] || {};
 
   return (
     <div className="min-h-screen pt-0 px-2 sm:px-8 md:px-12 lg:px-16 max-w-screen-xl mx-auto flex flex-col">
@@ -87,7 +87,7 @@ const Readings = ({ params }) => {
       </div>
       <button
         onClick={() => window.print()}
-        className="fixed top-4 right-6 bg-[#9799f577] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg"
+        className="fixed top-4 right-6 bg-[#9799f577] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg text-dark_p"
       >
         Print
       </button>
@@ -229,7 +229,7 @@ const Readings = ({ params }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Readings
+export default Readings;

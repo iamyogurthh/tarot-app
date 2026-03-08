@@ -1,25 +1,25 @@
-'use client'
-import React from 'react'
-import Link from 'next/link'
-import { useForm } from '@/context/FormContext'
-import { useTarot } from '@/context/TarotContext'
+'use client';
+import React from 'react';
+import Link from 'next/link';
+import { useForm } from '@/context/FormContext';
+import { useTarot } from '@/context/TarotContext';
 
 const MainMenuBtn = () => {
-  const { clearForm } = useForm()
-  const { setUserSelectedTarotData } = useTarot()
+  const { clearForm } = useForm();
+  const { setUserSelectedTarotData } = useTarot();
   return (
     <div>
       <Link
         href="/"
-        className="bg-[#9799f543] absolute top-[16px] left-[16px] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg text-dark_p"
+        className="bg-[#9799f543] absolute top-[16px] left-[16px] px-[32px] py-[8px] rounded-[24px] font-bold shadow-lg text-dark_p z-100"
         onClick={() => {
-          clearForm(), setUserSelectedTarotData([])
+          (clearForm(), setUserSelectedTarotData([]));
         }}
       >
         Main Menu
       </Link>
     </div>
-  )
-}
+  );
+};
 
-export default MainMenuBtn
+export default MainMenuBtn;

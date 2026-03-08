@@ -1,44 +1,42 @@
-'use client'
+'use client';
 
-import Banner from '@/components/Banner'
-import ReuseableTable from '@/components/ReuseableTable'
-import SearchBox from '@/components/SearchBox'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import DeleteBtn from '@/components/DeleteBtn'
-import { formatBirthDate } from '@/utils/utils.client'
+import Banner from '@/components/Banner';
+import ReuseableTable from '@/components/ReuseableTable';
+import SearchBox from '@/components/SearchBox';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import DeleteBtn from '@/components/DeleteBtn';
+import { formatBirthDate } from '@/utils/utils.client';
 
 const Page = () => {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
-
-  console.log(data)
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Fetch users with optional search keyword
   const fetchUsers = async (keyword = '') => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       const res = await fetch(
         `http://localhost:3000/api/admin?keyword=${keyword}`,
-        { cache: 'no-store' }
-      )
+        { cache: 'no-store' },
+      );
 
-      if (!res.ok) throw new Error('Failed to fetch users')
+      if (!res.ok) throw new Error('Failed to fetch users');
 
-      const json = await res.json()
-      setData(json)
+      const json = await res.json();
+      setData(json);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // Load all users on mount
   useEffect(() => {
-    fetchUsers()
-  }, [])
+    fetchUsers();
+  }, []);
 
   const columns = [
     {
@@ -70,11 +68,15 @@ const Page = () => {
           >
             View Detail
           </Link>
-          <DeleteBtn endpoint="http://localhost:3000/api/users" id={row.id} />
+          <DeleteBtn
+            endpoint="http://localhost:3000/api/users"
+            id={row.id}
+            onSuccess={() => fetchUsers()}
+          />
         </div>
       ),
     },
-  ]
+  ];
 
   return (
     <div className="p-2 h-full w-full">
@@ -94,7 +96,7 @@ const Page = () => {
 
       <ReuseableTable columns={columns} data={data} rowKey="id" />
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

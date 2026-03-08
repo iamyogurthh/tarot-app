@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import { useForm } from '@/context/FormContext'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import FullScreenLoader from '@/components/FullScreenLoader'
-import { useTarot } from '@/context/TarotContext'
+import { useForm } from '@/context/FormContext';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import FullScreenLoader from '@/components/FullScreenLoader';
+import { useTarot } from '@/context/TarotContext';
 
 const Page = () => {
-  const { formData, clearForm, updateField } = useForm()
-  const [hovered, setHovered] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const router = useRouter()
-  const { setTarotsForSelection } = useTarot()
+  const { formData, clearForm, updateField } = useForm();
+  const [hovered, setHovered] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  const { setTarotsForSelection } = useTarot();
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
     try {
-      const formDataToSend = new FormData()
-      formDataToSend.append('topic', formData.topic)
-      formDataToSend.append('user_id', formData.user_id)
-      formDataToSend.append('real_name', formData.full_name)
-      formDataToSend.append('dob', formData.dob)
-      formDataToSend.append('major', formData.major)
+      const formDataToSend = new FormData();
+      formDataToSend.append('topic', formData.topic);
+      formDataToSend.append('user_id', formData.user_id);
+      formDataToSend.append('real_name', formData.full_name);
+      formDataToSend.append('dob', formData.dob);
+      formDataToSend.append('major', formData.major);
 
       if (
         !formData.topic ||
@@ -32,38 +32,38 @@ const Page = () => {
         !formData.dob ||
         !formData.major
       ) {
-        console.error('Form data incomplete')
-        return
+        console.error('Form data incomplete');
+        return;
       }
 
       const res = await fetch(`http://localhost:3000/api/users`, {
         method: 'POST',
         body: formDataToSend,
-      })
+      });
 
       if (!res.ok) {
-        setIsSubmitting(false)
-        throw new Error('Failed to create user')
+        setIsSubmitting(false);
+        throw new Error('Failed to create user');
       } else {
-        const data = await res.json()
-        console.log('Return from server 10 cards: ', data)
-        updateField('zodiac', data.zodiac)
-        updateField('numerology', data.numerology)
-        setTarotsForSelection(data)
+        const data = await res.json();
+        console.log('Return from server 10 cards: ', data);
+        updateField('zodiac', data.zodiac);
+        updateField('numerology', data.numerology);
+        setTarotsForSelection(data);
 
-        router.push('/cardSelection')
+        router.push('/cardSelection');
       }
     } catch (error) {
-      console.log('Error: ' + error)
+      console.log('Error: ' + error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
-  if (isSubmitting) return <FullScreenLoader text="Fetching data..." />
+  if (isSubmitting) return <FullScreenLoader text="ခေတ္တခဏစောင့်ဆိုင်းပေးပါ" />;
 
-  const cardCount = 4
-  const angleStep = 3 // degrees
+  const cardCount = 4;
+  const angleStep = 3; // degrees
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-center relative">
@@ -90,9 +90,9 @@ const Page = () => {
           onMouseLeave={() => setHovered(false)}
         >
           {Array.from({ length: cardCount }).map((_, i) => {
-            const rotate = angleStep * (i - (cardCount - 1) / 2) // symmetrical fan
-            const zIndex = 10 + i
-            const translateY = hovered ? -i * 2 : 0
+            const rotate = angleStep * (i - (cardCount - 1) / 2); // symmetrical fan
+            const zIndex = 10 + i;
+            const translateY = hovered ? -i * 2 : 0;
 
             return (
               <Image
@@ -107,12 +107,15 @@ const Page = () => {
                   zIndex,
                 }}
               />
-            )
+            );
           })}
         </button>
       </form>
+      <div className="absolute top-80 left-0 animate-float">
+        <Image src={'/cute.png'} width={800} height={800} alt="cute" />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
